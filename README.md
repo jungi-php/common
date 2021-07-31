@@ -2,6 +2,8 @@
 
 A core library that adds extra basic features to PHP. Inspired by Rust core library.
 
+![Build Status](https://github.com/piku235/jungi-core/actions/workflows/continuous-integration.yml/badge.svg)
+
 **Includes:**
 * Result type
 * Option type

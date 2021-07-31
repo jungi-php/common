@@ -1,0 +1,33 @@
+{
+    "name": "jungi/core",
+    "description": "A core library that adds extra basic features to PHP.",
+    "keywords": ["result", "option", "rust"],
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Piotr Kugla",
+            "email": "piku235@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "files": ["src/functions.php"],
+        "psr-4": {
+            "Jungi\\Core\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jungi\\Core\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin/"
+    }
+}

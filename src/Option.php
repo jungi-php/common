@@ -30,6 +30,15 @@ abstract class Option
     abstract public function isNone(): bool;
 
     /**
+     * @template U
+     *
+     * @param callable(T): U $fn
+     *
+     * @return Option<U>
+     */
+    abstract public function andThen(callable $fn): self;
+
+    /**
      * @return T
      */
     abstract public function unwrap();
@@ -79,6 +88,11 @@ final class Some extends Option
         return false;
     }
 
+    public function andThen(callable $fn): Option
+    {
+        return new self($fn($this->value));
+    }
+
     /**
      * @return T
      */
@@ -123,6 +137,11 @@ final class None extends Option
     public function isNone(): bool
     {
         return true;
+    }
+
+    public function andThen(callable $fn): Option
+    {
+        return $this;
     }
 
     public function unwrap()

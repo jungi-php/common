@@ -29,6 +29,16 @@ class OptionTest extends TestCase
         $this->assertNull($option->unwrapOr(null));
     }
 
+    public function testCombiningOptionsByAndThen(): void
+    {
+        $option = Option::Some(2)
+            ->andThen(fn($value) => 3 * $value)
+            ->andThen(fn($value) => 1 + $value);
+
+        $this->assertTrue($option->isSome());
+        $this->assertEquals(7, $option->unwrap());
+    }
+
     public function testThatNoneOptionFailsOnUnwrap(): void
     {
         $this->expectException(\LogicException::class);

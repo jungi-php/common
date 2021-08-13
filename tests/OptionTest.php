@@ -18,7 +18,6 @@ class OptionTest extends TestCase
         $this->assertFalse($option->isNone());
         $this->assertEquals(123, $option->unwrap());
         $this->assertEquals(123, $option->unwrapOr(null));
-        $this->assertEquals(123, $option->expect('message'));
     }
 
     public function testNoneOption(): void
@@ -28,15 +27,6 @@ class OptionTest extends TestCase
         $this->assertFalse($option->isSome());
         $this->assertTrue($option->isNone());
         $this->assertNull($option->unwrapOr(null));
-    }
-
-    public function testThatExpectedMessageIsThrown(): void
-    {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('message');
-
-        $option = Option::None();
-        $option->expect('message');
     }
 
     public function testThatNoneOptionFailsOnUnwrap(): void

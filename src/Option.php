@@ -32,11 +32,6 @@ abstract class Option
     /**
      * @return T
      */
-    abstract public function expect(string $message);
-
-    /**
-     * @return T
-     */
     abstract public function unwrap();
 
     /**
@@ -87,14 +82,6 @@ final class Some extends Option
     /**
      * @return T
      */
-    public function expect(string $message)
-    {
-        return $this->value;
-    }
-
-    /**
-     * @return T
-     */
     public function unwrap()
     {
         return $this->value;
@@ -136,11 +123,6 @@ final class None extends Option
     public function isNone(): bool
     {
         return true;
-    }
-
-    public function expect(string $message)
-    {
-        throw new \LogicException($message);
     }
 
     public function unwrap()

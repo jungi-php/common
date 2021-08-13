@@ -43,11 +43,6 @@ abstract class Result
     /**
      * @return T
      */
-    abstract public function expect(string $message);
-
-    /**
-     * @return T
-     */
     abstract public function unwrap();
 
     /**
@@ -102,14 +97,6 @@ final class Ok extends Result
     public function isErr(): bool
     {
         return false;
-    }
-
-    /**
-     * @return T
-     */
-    public function expect(string $message)
-    {
-        return $this->value;
     }
 
     /**
@@ -175,11 +162,6 @@ final class Err extends Result
     public function isErr(): bool
     {
         return true;
-    }
-
-    public function expect(string $message)
-    {
-        throw new \LogicException($message);
     }
 
     public function unwrap()

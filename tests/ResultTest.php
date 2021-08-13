@@ -18,7 +18,6 @@ class ResultTest extends TestCase
         $this->assertFalse($result->isErr());
         $this->assertEquals(123, $result->unwrap());
         $this->assertEquals(123, $result->unwrapOr(null));
-        $this->assertEquals(123, $result->expect('message'));
     }
 
     public function testErrResult(): void
@@ -29,15 +28,6 @@ class ResultTest extends TestCase
         $this->assertTrue($result->isErr());
         $this->assertNull($result->unwrapOr(null));
         $this->assertEquals(123, $result->unwrapErr());
-    }
-
-    public function testThatExpectedMessageIsThrown(): void
-    {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('message');
-
-        $result = Result::Err(123);
-        $result->expect('message');
     }
 
     public function testThatOkResultFailsOnUnwrapErr(): void

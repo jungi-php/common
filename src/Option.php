@@ -39,6 +39,15 @@ abstract class Option
     abstract public function andThen(callable $fn): self;
 
     /**
+     * @template U
+     *
+     * @param callable(T): Option<U> $fn
+     *
+     * @return Option<U>
+     */
+    abstract public function andThenTo(callable $fn): self;
+
+    /**
      * @return T
      */
     abstract public function unwrap();
@@ -93,6 +102,11 @@ final class Some extends Option
         return new self($fn($this->value));
     }
 
+    public function andThenTo(callable $fn): Option
+    {
+        return $fn($this->value);
+    }
+
     /**
      * @return T
      */
@@ -140,6 +154,11 @@ final class None extends Option
     }
 
     public function andThen(callable $fn): Option
+    {
+        return $this;
+    }
+
+    public function andThenTo(callable $fn): Option
     {
         return $this;
     }

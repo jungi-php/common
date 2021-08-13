@@ -39,6 +39,38 @@ class OptionTest extends TestCase
         $this->assertEquals(7, $option->unwrap());
     }
 
+    public function testCombiningResultsByAndThenTo(): void
+    {
+        $op1 = Option::Some(2);
+        $op2 = $op1
+            ->andThenTo([__CLASS__, 'multiply'])
+            ->andThenTo([__CLASS__, 'multiply']);
+
+        $this->assertTrue($op2->isSome());
+        $this->assertEquals(8, $op2->unwrap());
+
+        $op1 = Option::None();
+        $op2 = $op1
+            ->andThenTo([__CLASS__, 'multiply'])
+            ->andThenTo([__CLASS__, 'multiply']);
+
+        $this->assertTrue($op2->isNone());
+
+        $op1 = Option::Some(2);
+        $op2 = $op1
+            ->andThenTo(fn($value) => Option::None())
+            ->andThenTo([__CLASS__, 'multiply']);
+
+        $this->assertTrue($op2->isNone());
+
+        $op1 = Option::Some(2);
+        $op2 = $op1
+            ->andThenTo([__CLASS__, 'multiply'])
+            ->andThenTo(fn($value) => Option::None());
+
+        $this->assertTrue($op2->isNone());
+    }
+
     public function testThatNoneOptionFailsOnUnwrap(): void
     {
         $this->expectException(\LogicException::class);
@@ -60,5 +92,10 @@ class OptionTest extends TestCase
 
         $this->assertTrue($result->isErr());
         $this->assertEquals('err', $result->unwrapErr());
+    }
+
+    public static function multiply(int $value): Option
+    {
+        return Some(2 * $value);
     }
 }

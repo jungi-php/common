@@ -46,6 +46,41 @@ class ResultTest extends TestCase
         $this->assertEquals(2, $result->unwrapErr());
     }
 
+    public function testCombiningResultsByAndThenTo(): void
+    {
+        $r1 = Result::Ok(2);
+        $r2 = $r1
+            ->andThenTo([__CLASS__, 'multiply'])
+            ->andThenTo([__CLASS__, 'multiply']);
+
+        $this->assertTrue($r2->isOk());
+        $this->assertEquals(8, $r2->unwrap());
+
+        $r1 = Result::Err(3);
+        $r2 = $r1
+            ->andThenTo([__CLASS__, 'multiply'])
+            ->andThenTo([__CLASS__, 'multiply']);
+
+        $this->assertTrue($r2->isErr());
+        $this->assertEquals(3, $r2->unwrapErr());
+
+        $r1 = Result::Ok(2);
+        $r2 = $r1
+            ->andThenTo([__CLASS__, 'err'])
+            ->andThenTo([__CLASS__, 'multiply']);
+
+        $this->assertTrue($r2->isErr());
+        $this->assertEquals(2, $r2->unwrapErr());
+
+        $r1 = Result::Ok(2);
+        $r2 = $r1
+            ->andThenTo([__CLASS__, 'multiply'])
+            ->andThenTo([__CLASS__, 'err']);
+
+        $this->assertTrue($r2->isErr());
+        $this->assertEquals(4, $r2->unwrapErr());
+    }
+
     public function testThatOkResultFailsOnUnwrapErr(): void
     {
         $this->expectException(\LogicException::class);
@@ -90,5 +125,15 @@ class ResultTest extends TestCase
 
         $this->assertTrue($option->isSome());
         $this->assertEquals(123, $option->unwrap());
+    }
+
+    public static function multiply(int $value): Result
+    {
+        return Result::Ok(2 * $value);
+    }
+
+    public static function err($value): Result
+    {
+        return Result::Err($value);
     }
 }

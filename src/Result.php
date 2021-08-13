@@ -50,6 +50,16 @@ abstract class Result
     abstract public function andThen(callable $fn): self;
 
     /**
+     * @template U
+     * @template R
+     *
+     * @param callable(T): Result<U, R> $fn
+     *
+     * @return Result<U, R>
+     */
+    abstract public function andThenTo(callable $fn): self;
+
+    /**
      * @return T
      */
     abstract public function unwrap();
@@ -111,6 +121,11 @@ final class Ok extends Result
     public function andThen(callable $fn): Result
     {
         return new self($fn($this->value));
+    }
+
+    public function andThenTo(callable $fn): Result
+    {
+        return $fn($this->value);
     }
 
     /**
@@ -179,6 +194,11 @@ final class Err extends Result
     }
 
     public function andThen(callable $fn): Result
+    {
+        return $this;
+    }
+
+    public function andThenTo(callable $fn): Result
     {
         return $this;
     }

@@ -91,6 +91,13 @@ abstract class Result
     abstract public function unwrapOr($value);
 
     /**
+     * @param callable(E): T $fn
+     *
+     * @return T
+     */
+    abstract public function unwrapOrElse(callable $fn);
+
+    /**
      * @return E
      */
     abstract public function unwrapErr();
@@ -180,6 +187,11 @@ final class Ok extends Result
         throw new \LogicException('Called on an "Ok" value.');
     }
 
+    public function unwrapOrElse(callable $fn)
+    {
+        return $this->value;
+    }
+
     public function asOk(): Option
     {
         return Option::Some($this->value);
@@ -250,6 +262,11 @@ final class Err extends Result
     public function unwrapOr($value)
     {
         return $value;
+    }
+
+    public function unwrapOrElse(callable $fn)
+    {
+        return $fn($this->value);
     }
 
     /**

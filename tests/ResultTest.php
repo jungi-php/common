@@ -18,6 +18,7 @@ class ResultTest extends TestCase
         $this->assertFalse($result->isErr());
         $this->assertEquals(123, $result->unwrap());
         $this->assertEquals(123, $result->unwrapOr(null));
+        $this->assertEquals(123, $result->unwrapOrElse(fn($val) => 2 * $val));
     }
 
     public function testErrResult(): void
@@ -28,6 +29,7 @@ class ResultTest extends TestCase
         $this->assertTrue($result->isErr());
         $this->assertNull($result->unwrapOr(null));
         $this->assertEquals(123, $result->unwrapErr());
+        $this->assertEquals(246, $result->unwrapOrElse(fn($val) => 2 * $val));
     }
 
     public function testCombiningResultsByAndThen(): void

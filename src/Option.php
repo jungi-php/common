@@ -60,6 +60,13 @@ abstract class Option
     abstract public function unwrapOr($value);
 
     /**
+     * @param callable(): T $fn
+     *
+     * @return T
+     */
+    abstract public function unwrapOrElse(callable $fn);
+
+    /**
      * @template E
      * @param E $err
      */
@@ -125,6 +132,11 @@ final class Some extends Option
         return $this->value;
     }
 
+    public function unwrapOrElse(callable $fn)
+    {
+        return $this->value;
+    }
+
     /**
      * @template E
      * @param E $err
@@ -171,6 +183,11 @@ final class None extends Option
     public function unwrapOr($value)
     {
         return $value;
+    }
+
+    public function unwrapOrElse(callable $fn)
+    {
+        return $fn();
     }
 
     /**

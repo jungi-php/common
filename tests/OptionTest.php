@@ -18,6 +18,7 @@ class OptionTest extends TestCase
         $this->assertFalse($option->isNone());
         $this->assertEquals(123, $option->unwrap());
         $this->assertEquals(123, $option->unwrapOr(null));
+        $this->assertEquals(123, $option->unwrapOrElse(fn() => 234));
     }
 
     public function testNoneOption(): void
@@ -27,6 +28,7 @@ class OptionTest extends TestCase
         $this->assertFalse($option->isSome());
         $this->assertTrue($option->isNone());
         $this->assertNull($option->unwrapOr(null));
+        $this->assertEquals(234, $option->unwrapOrElse(fn() => 234));
     }
 
     public function testCombiningOptionsByAndThen(): void

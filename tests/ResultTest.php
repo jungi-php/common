@@ -30,6 +30,22 @@ class ResultTest extends TestCase
         $this->assertEquals(123, $result->unwrapErr());
     }
 
+    public function testCombiningResultsByAndThen(): void
+    {
+        $result = Result::Ok(2)
+            ->andThen(fn($value) => 3 * $value)
+            ->andThen(fn($value) => 1 + $value);
+
+        $this->assertTrue($result->isOk());
+        $this->assertEquals(7, $result->unwrap());
+
+        $result = Result::Err(2)
+            ->andThen(fn($value) => 1 + $value);
+
+        $this->assertTrue($result->isErr());
+        $this->assertEquals(2, $result->unwrapErr());
+    }
+
     public function testThatOkResultFailsOnUnwrapErr(): void
     {
         $this->expectException(\LogicException::class);

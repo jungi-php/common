@@ -41,6 +41,15 @@ abstract class Result
     abstract public function isErr(): bool;
 
     /**
+     * @template U
+     *
+     * @param callable(T): U $fn
+     *
+     * @return Result<U, E>
+     */
+    abstract public function andThen(callable $fn): self;
+
+    /**
      * @return T
      */
     abstract public function unwrap();
@@ -97,6 +106,11 @@ final class Ok extends Result
     public function isErr(): bool
     {
         return false;
+    }
+
+    public function andThen(callable $fn): Result
+    {
+        return new self($fn($this->value));
     }
 
     /**
@@ -162,6 +176,11 @@ final class Err extends Result
     public function isErr(): bool
     {
         return true;
+    }
+
+    public function andThen(callable $fn): Result
+    {
+        return $this;
     }
 
     public function unwrap()

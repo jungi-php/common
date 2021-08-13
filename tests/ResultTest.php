@@ -97,6 +97,41 @@ class ResultTest extends TestCase
         $this->assertEquals(2, $result->unwrap());
     }
 
+    public function testCombiningResultsByOrElseTo(): void
+    {
+        $r1 = Result::Ok(2);
+        $r2 = $r1
+            ->orElseTo([__CLASS__, 'multiply'])
+            ->orElseTo([__CLASS__, 'err']);
+
+        $this->assertTrue($r2->isOk());
+        $this->assertEquals(2, $r2->unwrap());
+
+        $r1 = Result::Err(3);
+        $r2 = $r1
+            ->orElseTo([__CLASS__, 'multiply'])
+            ->orElseTo([__CLASS__, 'err']);
+
+        $this->assertTrue($r2->isOk());
+        $this->assertEquals(6, $r2->unwrap());
+
+        $r1 = Result::Err(4);
+        $r2 = $r1
+            ->orElseTo(fn($value) => Result::Err($value - 2))
+            ->orElseTo([__CLASS__, 'multiply']);
+
+        $this->assertTrue($r2->isOk());
+        $this->assertEquals(4, $r2->unwrap());
+
+        $r1 = Result::Err(3);
+        $r2 = $r1
+            ->orElseTo([__CLASS__, 'err'])
+            ->orElseTo([__CLASS__, 'err']);
+
+        $this->assertTrue($r2->isErr());
+        $this->assertEquals(3, $r2->unwrapErr());
+    }
+
     public function testThatOkResultFailsOnUnwrapErr(): void
     {
         $this->expectException(\LogicException::class);

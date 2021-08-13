@@ -69,6 +69,16 @@ abstract class Result
     abstract public function orElse(callable $fn): self;
 
     /**
+     * @template U
+     * @template R
+     *
+     * @param callable(E): Result<U, R> $fn
+     *
+     * @return Result<U, R>
+     */
+    abstract public function orElseTo(callable $fn): self;
+
+    /**
      * @return T
      */
     abstract public function unwrap();
@@ -138,6 +148,11 @@ final class Ok extends Result
     }
 
     public function orElse(callable $fn): Result
+    {
+        return $this;
+    }
+
+    public function orElseTo(callable $fn): Result
     {
         return $this;
     }
@@ -220,6 +235,11 @@ final class Err extends Result
     public function orElse(callable $fn): Result
     {
         return new self($fn($this->value));
+    }
+
+    public function orElseTo(callable $fn): Result
+    {
+        return $fn($this->value);
     }
 
     public function unwrap()

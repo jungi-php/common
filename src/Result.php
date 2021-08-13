@@ -60,6 +60,15 @@ abstract class Result
     abstract public function andThenTo(callable $fn): self;
 
     /**
+     * @template R
+     *
+     * @param callable(E): R $fn
+     *
+     * @return Result<T, R>
+     */
+    abstract public function orElse(callable $fn): self;
+
+    /**
      * @return T
      */
     abstract public function unwrap();
@@ -126,6 +135,11 @@ final class Ok extends Result
     public function andThenTo(callable $fn): Result
     {
         return $fn($this->value);
+    }
+
+    public function orElse(callable $fn): Result
+    {
+        return $this;
     }
 
     /**
@@ -201,6 +215,11 @@ final class Err extends Result
     public function andThenTo(callable $fn): Result
     {
         return $this;
+    }
+
+    public function orElse(callable $fn): Result
+    {
+        return new self($fn($this->value));
     }
 
     public function unwrap()

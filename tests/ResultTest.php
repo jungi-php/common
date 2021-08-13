@@ -81,6 +81,22 @@ class ResultTest extends TestCase
         $this->assertEquals(4, $r2->unwrapErr());
     }
 
+    public function testCombiningResultsByOrElse(): void
+    {
+        $result = Result::Err(2)
+            ->orElse(fn($value) => 3 * $value)
+            ->orElse(fn($value) => 1 + $value);
+
+        $this->assertTrue($result->isErr());
+        $this->assertEquals(7, $result->unwrapErr());
+
+        $result = Result::Ok(2)
+            ->orElse(fn($value) => 2 + $value);
+
+        $this->assertTrue($result->isOk());
+        $this->assertEquals(2, $result->unwrap());
+    }
+
     public function testThatOkResultFailsOnUnwrapErr(): void
     {
         $this->expectException(\LogicException::class);

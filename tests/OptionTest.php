@@ -16,9 +16,9 @@ class OptionTest extends TestCase
 
         $this->assertTrue($option->isSome());
         $this->assertFalse($option->isNone());
-        $this->assertEquals(123, $option->unwrap());
-        $this->assertEquals(123, $option->unwrapOr(null));
-        $this->assertEquals(123, $option->unwrapOrElse(fn() => 234));
+        $this->assertEquals(123, $option->get());
+        $this->assertEquals(123, $option->getOr(null));
+        $this->assertEquals(123, $option->getOrElse(fn() => 234));
     }
 
     public function testNoneOption(): void
@@ -27,8 +27,8 @@ class OptionTest extends TestCase
 
         $this->assertFalse($option->isSome());
         $this->assertTrue($option->isNone());
-        $this->assertNull($option->unwrapOr(null));
-        $this->assertEquals(234, $option->unwrapOrElse(fn() => 234));
+        $this->assertNull($option->getOr(null));
+        $this->assertEquals(234, $option->getOrElse(fn() => 234));
     }
 
     public function testCombiningOptionsByAndThen(): void
@@ -38,7 +38,7 @@ class OptionTest extends TestCase
             ->andThen(fn($value) => 1 + $value);
 
         $this->assertTrue($option->isSome());
-        $this->assertEquals(7, $option->unwrap());
+        $this->assertEquals(7, $option->get());
     }
 
     public function testCombiningResultsByAndThenTo(): void
@@ -49,7 +49,7 @@ class OptionTest extends TestCase
             ->andThenTo([__CLASS__, 'multiply']);
 
         $this->assertTrue($op2->isSome());
-        $this->assertEquals(8, $op2->unwrap());
+        $this->assertEquals(8, $op2->get());
 
         $op1 = Option::None();
         $op2 = $op1
@@ -79,7 +79,7 @@ class OptionTest extends TestCase
         $this->expectExceptionMessage('Called on an "None" value.');
 
         $option = Option::None();
-        $option->unwrap();
+        $option->get();
     }
 
     public function testSomeOptionAsOkOrErr(): void
@@ -93,7 +93,7 @@ class OptionTest extends TestCase
         $result = $option->asOkOr('err');
 
         $this->assertTrue($result->isErr());
-        $this->assertEquals('err', $result->unwrapErr());
+        $this->assertEquals('err', $result->getErr());
     }
 
     public static function multiply(int $value): Option

@@ -50,21 +50,21 @@ abstract class Option
     /**
      * @return T
      */
-    abstract public function unwrap();
+    abstract public function get();
 
     /**
      * @param T $value
      *
      * @return T
      */
-    abstract public function unwrapOr($value);
+    abstract public function getOr($value);
 
     /**
      * @param callable(): T $fn
      *
      * @return T
      */
-    abstract public function unwrapOrElse(callable $fn);
+    abstract public function getOrElse(callable $fn);
 
     /**
      * @template E
@@ -117,7 +117,7 @@ final class Some extends Option
     /**
      * @return T
      */
-    public function unwrap()
+    public function get()
     {
         return $this->value;
     }
@@ -127,12 +127,12 @@ final class Some extends Option
      *
      * @return T
      */
-    public function unwrapOr($value)
+    public function getOr($value)
     {
         return $this->value;
     }
 
-    public function unwrapOrElse(callable $fn)
+    public function getOrElse(callable $fn)
     {
         return $this->value;
     }
@@ -175,17 +175,17 @@ final class None extends Option
         return $this;
     }
 
-    public function unwrap()
+    public function get()
     {
         throw new \LogicException('Called on an "None" value.');
     }
 
-    public function unwrapOr($value)
+    public function getOr($value)
     {
         return $value;
     }
 
-    public function unwrapOrElse(callable $fn)
+    public function getOrElse(callable $fn)
     {
         return $fn();
     }

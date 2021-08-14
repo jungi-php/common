@@ -16,9 +16,9 @@ class ResultTest extends TestCase
 
         $this->assertTrue($result->isOk());
         $this->assertFalse($result->isErr());
-        $this->assertEquals(123, $result->unwrap());
-        $this->assertEquals(123, $result->unwrapOr(null));
-        $this->assertEquals(123, $result->unwrapOrElse(fn($val) => 2 * $val));
+        $this->assertEquals(123, $result->get());
+        $this->assertEquals(123, $result->getOr(null));
+        $this->assertEquals(123, $result->getOrElse(fn($val) => 2 * $val));
     }
 
     public function testErrResult(): void
@@ -27,9 +27,9 @@ class ResultTest extends TestCase
 
         $this->assertFalse($result->isOk());
         $this->assertTrue($result->isErr());
-        $this->assertNull($result->unwrapOr(null));
-        $this->assertEquals(123, $result->unwrapErr());
-        $this->assertEquals(246, $result->unwrapOrElse(fn($val) => 2 * $val));
+        $this->assertNull($result->getOr(null));
+        $this->assertEquals(123, $result->getErr());
+        $this->assertEquals(246, $result->getOrElse(fn($val) => 2 * $val));
     }
 
     public function testCombiningResultsByAndThen(): void
@@ -39,13 +39,13 @@ class ResultTest extends TestCase
             ->andThen(fn($value) => 1 + $value);
 
         $this->assertTrue($result->isOk());
-        $this->assertEquals(7, $result->unwrap());
+        $this->assertEquals(7, $result->get());
 
         $result = Result::Err(2)
             ->andThen(fn($value) => 1 + $value);
 
         $this->assertTrue($result->isErr());
-        $this->assertEquals(2, $result->unwrapErr());
+        $this->assertEquals(2, $result->getErr());
     }
 
     public function testCombiningResultsByAndThenTo(): void
@@ -56,7 +56,7 @@ class ResultTest extends TestCase
             ->andThenTo([__CLASS__, 'multiply']);
 
         $this->assertTrue($r2->isOk());
-        $this->assertEquals(8, $r2->unwrap());
+        $this->assertEquals(8, $r2->get());
 
         $r1 = Result::Err(3);
         $r2 = $r1
@@ -64,7 +64,7 @@ class ResultTest extends TestCase
             ->andThenTo([__CLASS__, 'multiply']);
 
         $this->assertTrue($r2->isErr());
-        $this->assertEquals(3, $r2->unwrapErr());
+        $this->assertEquals(3, $r2->getErr());
 
         $r1 = Result::Ok(2);
         $r2 = $r1
@@ -72,7 +72,7 @@ class ResultTest extends TestCase
             ->andThenTo([__CLASS__, 'multiply']);
 
         $this->assertTrue($r2->isErr());
-        $this->assertEquals(2, $r2->unwrapErr());
+        $this->assertEquals(2, $r2->getErr());
 
         $r1 = Result::Ok(2);
         $r2 = $r1
@@ -80,7 +80,7 @@ class ResultTest extends TestCase
             ->andThenTo([__CLASS__, 'err']);
 
         $this->assertTrue($r2->isErr());
-        $this->assertEquals(4, $r2->unwrapErr());
+        $this->assertEquals(4, $r2->getErr());
     }
 
     public function testCombiningResultsByOrElse(): void
@@ -90,13 +90,13 @@ class ResultTest extends TestCase
             ->orElse(fn($value) => 1 + $value);
 
         $this->assertTrue($result->isErr());
-        $this->assertEquals(7, $result->unwrapErr());
+        $this->assertEquals(7, $result->getErr());
 
         $result = Result::Ok(2)
             ->orElse(fn($value) => 2 + $value);
 
         $this->assertTrue($result->isOk());
-        $this->assertEquals(2, $result->unwrap());
+        $this->assertEquals(2, $result->get());
     }
 
     public function testCombiningResultsByOrElseTo(): void
@@ -107,7 +107,7 @@ class ResultTest extends TestCase
             ->orElseTo([__CLASS__, 'err']);
 
         $this->assertTrue($r2->isOk());
-        $this->assertEquals(2, $r2->unwrap());
+        $this->assertEquals(2, $r2->get());
 
         $r1 = Result::Err(3);
         $r2 = $r1
@@ -115,7 +115,7 @@ class ResultTest extends TestCase
             ->orElseTo([__CLASS__, 'err']);
 
         $this->assertTrue($r2->isOk());
-        $this->assertEquals(6, $r2->unwrap());
+        $this->assertEquals(6, $r2->get());
 
         $r1 = Result::Err(4);
         $r2 = $r1
@@ -123,7 +123,7 @@ class ResultTest extends TestCase
             ->orElseTo([__CLASS__, 'multiply']);
 
         $this->assertTrue($r2->isOk());
-        $this->assertEquals(4, $r2->unwrap());
+        $this->assertEquals(4, $r2->get());
 
         $r1 = Result::Err(3);
         $r2 = $r1
@@ -131,7 +131,7 @@ class ResultTest extends TestCase
             ->orElseTo([__CLASS__, 'err']);
 
         $this->assertTrue($r2->isErr());
-        $this->assertEquals(3, $r2->unwrapErr());
+        $this->assertEquals(3, $r2->getErr());
     }
 
     public function testThatOkResultFailsOnUnwrapErr(): void
@@ -140,7 +140,7 @@ class ResultTest extends TestCase
         $this->expectExceptionMessage('Called on an "Ok" value.');
 
         $result = Result::Ok(123);
-        $result->unwrapErr();
+        $result->getErr();
     }
 
     public function testThatErrResultFailsOnUnwrap(): void
@@ -149,7 +149,7 @@ class ResultTest extends TestCase
         $this->expectExceptionMessage('Called on an "Err" value.');
 
         $result = Result::Err(123);
-        $result->unwrap();
+        $result->get();
     }
 
     public function testResultAsOk(): void
@@ -158,7 +158,7 @@ class ResultTest extends TestCase
         $option = $result->asOk();
 
         $this->assertTrue($option->isSome());
-        $this->assertEquals(123, $option->unwrap());
+        $this->assertEquals(123, $option->get());
 
         $result = Result::Err(123);
         $option = $result->asOk();
@@ -177,7 +177,7 @@ class ResultTest extends TestCase
         $option = $result->asErr();
 
         $this->assertTrue($option->isSome());
-        $this->assertEquals(123, $option->unwrap());
+        $this->assertEquals(123, $option->get());
     }
 
     public static function multiply(int $value): Result

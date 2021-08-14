@@ -81,26 +81,26 @@ abstract class Result
     /**
      * @return T
      */
-    abstract public function unwrap();
+    abstract public function get();
 
     /**
      * @param T $value
      *
      * @return T
      */
-    abstract public function unwrapOr($value);
+    abstract public function getOr($value);
 
     /**
      * @param callable(E): T $fn
      *
      * @return T
      */
-    abstract public function unwrapOrElse(callable $fn);
+    abstract public function getOrElse(callable $fn);
 
     /**
      * @return E
      */
-    abstract public function unwrapErr();
+    abstract public function getErr();
 
     /**
      * @return Option
@@ -167,7 +167,7 @@ final class Ok extends Result
     /**
      * @return T
      */
-    public function unwrap()
+    public function get()
     {
         return $this->value;
     }
@@ -177,17 +177,17 @@ final class Ok extends Result
      *
      * @return T
      */
-    public function unwrapOr($value)
+    public function getOr($value)
     {
         return $this->value;
     }
 
-    public function unwrapErr()
+    public function getErr()
     {
         throw new \LogicException('Called on an "Ok" value.');
     }
 
-    public function unwrapOrElse(callable $fn)
+    public function getOrElse(callable $fn)
     {
         return $this->value;
     }
@@ -254,17 +254,17 @@ final class Err extends Result
         return $fn($this->value);
     }
 
-    public function unwrap()
+    public function get()
     {
         throw new \LogicException('Called on an "Err" value.');
     }
 
-    public function unwrapOr($value)
+    public function getOr($value)
     {
         return $value;
     }
 
-    public function unwrapOrElse(callable $fn)
+    public function getOrElse(callable $fn)
     {
         return $fn($this->value);
     }
@@ -272,7 +272,7 @@ final class Err extends Result
     /**
      * @return E
      */
-    public function unwrapErr()
+    public function getErr()
     {
         return $this->value;
     }

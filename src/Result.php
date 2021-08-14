@@ -207,7 +207,7 @@ final class Ok extends Result
  * @template E
  *
  * @internal
- * @see Result::err()
+ * @see Result::Err()
  *
  * @author Piotr Kugla <piku235@gmail.com>
  */

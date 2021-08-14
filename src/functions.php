@@ -6,7 +6,11 @@ use Jungi\Common\Option;
 if (!function_exists('Ok')) {
     /**
      * @template T
+     * @template E
+     *
      * @param T $value
+     *
+     * @return Result<T, E>
      */
     function Ok($value = null): Result
     {
@@ -16,8 +20,12 @@ if (!function_exists('Ok')) {
 
 if (!function_exists('Err')) {
     /**
+     * @template T
      * @template E
+     *
      * @param E $value
+     *
+     * @return Result<T, E>
      */
     function Err($value = null): Result
     {
@@ -28,6 +36,7 @@ if (!function_exists('Err')) {
 if (!function_exists('Some')) {
     /**
      * @template T
+     *
      * @param T $value
      */
     function Some($value = null): Option

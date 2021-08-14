@@ -4,11 +4,9 @@ A core library that adds extra basic features to PHP. Inspired by Rust core libr
 
 ![Build Status](https://github.com/piku235/jungi-core/actions/workflows/continuous-integration.yml/badge.svg)
 
-**Includes:**
-* Result type
-* Option type
-
 ## Quick insight
+
+### Result
 
 ```php
 function submit(): Result
@@ -18,15 +16,28 @@ function submit(): Result
         return Err($errors);
     }
     
-    return Ok();
+    return Ok($id);
 }
 
-$result = submit();
-if ($result->isErr()) {
-    $errors = $result->unwrapErr();
-    // display errors back to the user
-    exit(formatErrors($errors));
+$v = submit()
+    ->andThen(fn($id) => ['id' => $id])
+    ->getOrElse(fn($errors) => formatErrors($errors));
+```
+
+### Option
+
+```php
+function getItem(): Option
+{
+    // ...
+    if (!$item) {
+        return None();
+    }
+    
+    return Some($item);
 }
 
-// ok
+$v = getItem()
+    ->andThen(fn($item) => itemData($item))
+    ->getOr(['code' => 'not found.']);
 ```

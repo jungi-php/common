@@ -1,7 +1,7 @@
 {
-    "name": "jungi/core",
-    "description": "A core library that adds extra basic features to PHP.",
-    "keywords": ["result", "option", "rust"],
+    "name": "jungi/common",
+    "description": "A library that adds extra common features to PHP.",
+    "keywords": ["result", "option", "functional"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -19,12 +19,12 @@
     "autoload": {
         "files": ["src/functions.php"],
         "psr-4": {
-            "Jungi\\Core\\": "src/"
+            "Jungi\\Common\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Jungi\\Core\\Tests\\": "tests/"
+            "Jungi\\Common\\Tests\\": "tests/"
         }
     },
     "config": {

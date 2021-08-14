@@ -1,6 +1,6 @@
 <?php
 
-namespace Jungi\Core;
+namespace Jungi\Common;
 
 /**
  * @template T

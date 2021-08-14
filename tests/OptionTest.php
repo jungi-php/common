@@ -1,8 +1,8 @@
 <?php
 
-namespace Jungi\Core\Tests;
+namespace Jungi\Common\Tests;
 
-use Jungi\Core\Option;
+use Jungi\Common\Option;
 use PHPUnit\Framework\TestCase;
 
 /**

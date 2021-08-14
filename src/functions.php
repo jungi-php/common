@@ -1,7 +1,7 @@
 <?php
 
-use Jungi\Core\Result;
-use Jungi\Core\Option;
+use Jungi\Common\Result;
+use Jungi\Common\Option;
 
 if (!function_exists('Ok')) {
     /**

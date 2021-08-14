@@ -1,8 +1,8 @@
 <?php
 
-namespace Jungi\Core\Tests;
+namespace Jungi\Common\Tests;
 
-use Jungi\Core\Result;
+use Jungi\Common\Result;
 use PHPUnit\Framework\TestCase;
 
 /**

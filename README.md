@@ -1,8 +1,8 @@
-# Jungi Core Library
+# Jungi Common Library
 
-A core library that adds extra basic features to PHP. Inspired by Rust core library.
+A library that adds extra common features to PHP.
 
-![Build Status](https://github.com/piku235/jungi-core/actions/workflows/continuous-integration.yml/badge.svg)
+![Build Status](https://github.com/piku235/jungi-common/actions/workflows/continuous-integration.yml/badge.svg)
 
 ## Quick insight
 

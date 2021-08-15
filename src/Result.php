@@ -11,9 +11,13 @@ namespace Jungi\Common;
 abstract class Result
 {
     /**
+     * Result with an ok value.
+     *
      * @param T $value
      *
      * @see Ok() A shorthand version
+     *
+     * @return Result<T, E>
      */
     public static function Ok($value = null): self
     {
@@ -21,9 +25,13 @@ abstract class Result
     }
 
     /**
+     * Result with an error value.
+     *
      * @param E $value
      *
      * @see Err() A shorthand version
+     *
+     * @return Result<T, E>
      */
     public static function Err($value = null): self
     {
@@ -31,16 +39,32 @@ abstract class Result
     }
 
     /**
+     * Returns true if the Result is ok.
+     *
      * @return bool
      */
     abstract public function isOk(): bool;
 
     /**
+     * Returns true if the Result is err.
+     *
      * @return bool
      */
     abstract public function isErr(): bool;
 
     /**
+     * Maps the ok value by using the provided callback
+     * and returns new result, leaving the error value untouched.
+     *
+     * Example:
+     *
+     * <code>
+     *   function calc(int $value): int { return 2 * $value; }
+     *
+     *   Result::Ok(2)->andThen('calc').get()     // ok: 4
+     *   Result::Err(2)->andThen('calc').getErr() // err: 2
+     * </code>
+     *
      * @template U
      *
      * @param callable(T): U $fn
@@ -50,6 +74,21 @@ abstract class Result
     abstract public function andThen(callable $fn): self;
 
     /**
+     * Maps the ok value by using the provided callback which
+     * returns new result that can be either ok or err.
+     *
+     * Example:
+     *
+     * <code>
+     *   function calc(int $value): Result { return Ok(2 * $value); }
+     *   function err($value): Result { return Err($value) }
+     *
+     *   Result::Ok(2)->andThenTo('calc')->andThenTo('calc').get()     // ok: 8
+     *   Result::Ok(2)->andThenTo('calc')->andThenTo('err').getErr()   // err: 4
+     *   Result::Ok(2)->andThenTo('err')->andThenTo('calc').getErr()   // err: 2
+     *   Result::Err(2)->andThenTo('calc')->andThenTo('calc').getErr() // err: 2
+     * </code>
+     *
      * @template U
      * @template R
      *
@@ -60,6 +99,18 @@ abstract class Result
     abstract public function andThenTo(callable $fn): self;
 
     /**
+     * Maps the error value by using the provided callback
+     * and returns new result, leaving the ok value untouched.
+     *
+     * Example:
+     *
+     * <code>
+     *   function calc(int $value): { return 2 * $value; }
+     *
+     *   Result::Ok(2)->orElse('calc').get()     // ok: 2
+     *   Result::Err(2)->orElse('calc').getErr() // err: 4
+     * </code>
+     *
      * @template R
      *
      * @param callable(E): R $fn
@@ -69,6 +120,21 @@ abstract class Result
     abstract public function orElse(callable $fn): self;
 
     /**
+     * Maps the err value by using the provided callback which
+     * returns new result that can be either ok or err.
+     *
+     * Example:
+     *
+     * <code>
+     *   function calc(int $value): Result { return Ok(2 * $value); }
+     *   function err($value): Result { return Err($value) }
+     *
+     *   Result::Ok(2)->orElseTo('calc')->orElseTo('err').get()     // ok: 2
+     *   Result::Err(2)->orElseTo('calc')->orElseTo('err').get()    // ok: 4
+     *   Result::Err(2)->orElseTo('err')->orElseTo('calc').get()    // ok: 4
+     *   Result::Err(2)->orElseTo('err')->orElseTo('err').getErr()  // err: 2
+     * </code>
+     *
      * @template U
      * @template R
      *
@@ -79,11 +145,17 @@ abstract class Result
     abstract public function orElseTo(callable $fn): self;
 
     /**
+     * Returns the ok value.
+     *
      * @return T
+     *
+     * @throws \LogicException If Result is err
      */
     abstract public function get();
 
     /**
+     * Returns the ok value or the provided value on err.
+     *
      * @param T $value
      *
      * @return T
@@ -91,6 +163,9 @@ abstract class Result
     abstract public function getOr($value);
 
     /**
+     * Returns the ok value or a value returned
+     * by the provided callback on err.
+     *
      * @param callable(E): T $fn
      *
      * @return T
@@ -98,16 +173,24 @@ abstract class Result
     abstract public function getOrElse(callable $fn);
 
     /**
+     * Returns the error value.
+     *
      * @return E
+     *
+     * @throws \LogicException If Result is ok
      */
     abstract public function getErr();
 
     /**
+     * Returns an Option::Some(T) where T is the ok value.
+     *
      * @return Option
      */
     abstract public function asOk(): Option;
 
     /**
+     * Returns an Option::Some(E) where E is the error value.
+     *
      * @return Option
      */
     abstract public function asErr(): Option;
@@ -164,19 +247,11 @@ final class Ok extends Result
         return $this;
     }
 
-    /**
-     * @return T
-     */
     public function get()
     {
         return $this->value;
     }
 
-    /**
-     * @param T $value
-     *
-     * @return T
-     */
     public function getOr($value)
     {
         return $this->value;
@@ -269,9 +344,6 @@ final class Err extends Result
         return $fn($this->value);
     }
 
-    /**
-     * @return E
-     */
     public function getErr()
     {
         return $this->value;

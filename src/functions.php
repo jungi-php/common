@@ -5,6 +5,8 @@ use Jungi\Common\Option;
 
 if (!function_exists('Ok')) {
     /**
+     * Result with an ok value.
+     *
      * @template T
      * @template E
      *
@@ -20,6 +22,8 @@ if (!function_exists('Ok')) {
 
 if (!function_exists('Err')) {
     /**
+     * Result with an error value.
+     *
      * @template T
      * @template E
      *

@@ -1,7 +1,7 @@
 {
     "name": "jungi/common",
     "description": "A minimal library that goal is to provide essential basic functionality.",
-    "keywords": ["result", "option", "functional"],
+    "keywords": ["result", "option", "equatable", "functional"],
     "type": "library",
     "license": "MIT",
     "authors": [

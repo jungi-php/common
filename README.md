@@ -8,6 +8,7 @@ and object-oriented programming. All of this makes code easier to understand and
 Includes:
 * `Result<T, E>`
 * `Option<T>`
+* `Equatable<T>`
 
 ## Quick insight
 
@@ -45,4 +46,24 @@ function getItem(): Option
 $v = getItem()
     ->andThen(fn($item) => itemData($item))
     ->getOr(['code' => 'not found.']);
+```
+
+### Equatable
+
+```php
+class FullName implements Equatable
+{
+    private string $firstName;
+    private string $lastName;
+    
+    // firstName and lastName are later initialized in the constructor
+
+    public function equals(self $fullName): bool
+    {
+        return $this->firstName === $fullName->firstName && $this->lastName === $fullName->lastName;
+    }
+}
+
+assert(true === (new FullName('David', 'Copper'))->equals(new FullName('David', 'Copper')));
+assert(false === (new FullName('David', 'Copper'))->equals(new FullName('David', 'Eton')));
 ```

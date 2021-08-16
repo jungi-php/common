@@ -32,6 +32,20 @@ class ResultTest extends TestCase
         $this->assertEquals(246, $result->getOrElse(fn($val) => 2 * $val));
     }
 
+    /** @dataProvider provideEqualResults */
+    public function testThatTwoResultsEqual(Result $r1, Result $r2): void
+    {
+        $this->assertTrue($r1->equals($r2));
+        $this->assertTrue($r2->equals($r1));
+    }
+
+    /** @dataProvider provideNotEqualResults */
+    public function testThatTwoResultsNotEqual(Result $r1, Result $r2): void
+    {
+        $this->assertFalse($r1->equals($r2));
+        $this->assertFalse($r2->equals($r1));
+    }
+
     public function testCombiningResultsByAndThen(): void
     {
         $result = Result::Ok(2)
@@ -178,6 +192,19 @@ class ResultTest extends TestCase
 
         $this->assertTrue($option->isSome());
         $this->assertEquals(123, $option->get());
+    }
+
+    public function provideEqualResults(): iterable
+    {
+        yield [Result::Ok(123), Result::Ok(123)];
+        yield [Result::Err(234), Result::Err(234)];
+    }
+
+    public function provideNotEqualResults(): iterable
+    {
+        yield [Result::Ok(123), Result::Err(123)];
+        yield [Result::Ok(123), Result::Ok(234)];
+        yield [Result::Err(123), Result::Err(234)];
     }
 
     public static function multiply(int $value): Result

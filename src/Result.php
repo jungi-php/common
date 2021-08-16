@@ -6,9 +6,11 @@ namespace Jungi\Common;
  * @template T
  * @template E
  *
+ * @implements Equatable<Result<T, E>>
+ *
  * @author Piotr Kugla <piku235@gmail.com>
  */
-abstract class Result
+abstract class Result implements Equatable
 {
     /**
      * Result with an ok value.
@@ -227,6 +229,11 @@ final class Ok extends Result
         return false;
     }
 
+    public function equals(Result $result): bool
+    {
+        return $result instanceof self && Comparator::equals($this->value, $result->value);
+    }
+
     public function andThen(callable $fn): Result
     {
         return new self($fn($this->value));
@@ -307,6 +314,11 @@ final class Err extends Result
     public function isErr(): bool
     {
         return true;
+    }
+
+    public function equals(Result $result): bool
+    {
+        return $result instanceof self && Comparator::equals($this->value, $result->value);
     }
 
     public function andThen(callable $fn): Result

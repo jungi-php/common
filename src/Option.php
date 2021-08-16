@@ -4,10 +4,11 @@ namespace Jungi\Common;
 
 /**
  * @template T
+ * @implements Equatable<Option<T>>
  *
  * @author Piotr Kugla <piku235@gmail.com>
  */
-abstract class Option
+abstract class Option implements Equatable
 {
     public static function Some($value): self
     {
@@ -104,6 +105,11 @@ final class Some extends Option
         return false;
     }
 
+    public function equals(Option $option): bool
+    {
+        return $option instanceof self && Comparator::equals($this->value, $option->value);
+    }
+
     public function andThen(callable $fn): Option
     {
         return new self($fn($this->value));
@@ -163,6 +169,11 @@ final class None extends Option
     public function isNone(): bool
     {
         return true;
+    }
+
+    public function equals(Option $option): bool
+    {
+        return $option instanceof self;
     }
 
     public function andThen(callable $fn): Option

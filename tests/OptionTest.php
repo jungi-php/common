@@ -31,6 +31,22 @@ class OptionTest extends TestCase
         $this->assertEquals(234, $option->getOrElse(fn() => 234));
     }
 
+    /** @dataProvider provideEqualOptions */
+    public function testThatTwoOptionsEqual(Option $op1, Option $op2): void
+    {
+        $this->assertTrue($op1->equals($op2));
+        $this->assertTrue($op2->equals($op1));
+    }
+
+    public function testThatTwoOptionsNotEqual(): void
+    {
+        $op1 = Option::Some(123);
+        $op2 = Option::None();
+
+        $this->assertFalse($op1->equals($op2));
+        $this->assertFalse($op2->equals($op1));
+    }
+
     public function testCombiningOptionsByAndThen(): void
     {
         $option = Option::Some(2)
@@ -94,6 +110,12 @@ class OptionTest extends TestCase
 
         $this->assertTrue($result->isErr());
         $this->assertEquals('err', $result->getErr());
+    }
+
+    public function provideEqualOptions(): iterable
+    {
+        yield [Option::Some(123), Option::Some(123)];
+        yield [Option::None(), Option::None()];
     }
 
     public static function multiply(int $value): Option

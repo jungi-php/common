@@ -3,6 +3,9 @@
 namespace Jungi\Common;
 
 /**
+ * It represents either a success (Ok) or a failure (Err) result.
+ * Instead of throwing exceptions, a failure is an expected, recoverable error.
+ *
  * @template T
  * @template E
  *

@@ -3,6 +3,9 @@
 namespace Jungi\Common;
 
 /**
+ * It represents either some value or none.
+ * Instead of dealing with a null value, it allows for less error-prone operations.
+ *
  * @template T
  * @implements Equatable<Option<T>>
  *

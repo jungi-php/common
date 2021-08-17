@@ -2,27 +2,27 @@
 
 namespace Jungi\Common\Tests;
 
-use Jungi\Common\Comparator;
 use Jungi\Common\Equatable;
 use PHPUnit\Framework\TestCase;
+use function Jungi\Common\equals;
 
 /**
  * @author Piotr Kugla <piku235@gmail.com>
  */
-class ComparatorTest extends TestCase
+class FunctionsTest extends TestCase
 {
     /** @dataProvider provideEqualVariables */
     public function testThatTwoVariablesEqual($a, $b): void
     {
-        $this->assertTrue(Comparator::equals($a, $b));
-        $this->assertTrue(Comparator::equals($b, $a));
+        $this->assertTrue(equals($a, $b));
+        $this->assertTrue(equals($b, $a));
     }
 
     /** @dataProvider provideNotEqualVariables */
     public function testThatTwoVariablesNotEqual($a, $b): void
     {
-        $this->assertFalse(Comparator::equals($a, $b));
-        $this->assertFalse(Comparator::equals($b, $a));
+        $this->assertFalse(equals($a, $b));
+        $this->assertFalse(equals($b, $a));
     }
 
     public function provideEqualVariables(): iterable

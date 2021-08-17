@@ -1,57 +1,76 @@
 <?php
 
-use Jungi\Common\Result;
-use Jungi\Common\Option;
+namespace {
+    use Jungi\Common\Result;
+    use Jungi\Common\Option;
 
-if (!function_exists('Ok')) {
-    /**
-     * Result with an ok value.
-     *
-     * @template T
-     * @template E
-     *
-     * @param T $value
-     *
-     * @return Result<T, E>
-     */
-    function Ok($value = null): Result
-    {
-        return Result::Ok($value);
+    if (!function_exists('Ok')) {
+        /**
+         * Result with an ok value.
+         *
+         * @template T
+         * @template E
+         *
+         * @param T $value
+         *
+         * @return Result<T, E>
+         */
+        function Ok($value = null): Result
+        {
+            return Result::Ok($value);
+        }
+    }
+
+    if (!function_exists('Err')) {
+        /**
+         * Result with an error value.
+         *
+         * @template T
+         * @template E
+         *
+         * @param E $value
+         *
+         * @return Result<T, E>
+         */
+        function Err($value = null): Result
+        {
+            return Result::Err($value);
+        }
+    }
+
+    if (!function_exists('Some')) {
+        /**
+         * @template T
+         *
+         * @param T $value
+         */
+        function Some($value = null): Option
+        {
+            return Option::Some($value);
+        }
+    }
+
+    if (!function_exists('None')) {
+        function None(): Option
+        {
+            return Option::None();
+        }
     }
 }
 
-if (!function_exists('Err')) {
+namespace Jungi\Common {
     /**
-     * Result with an error value.
-     *
-     * @template T
-     * @template E
-     *
-     * @param E $value
-     *
-     * @return Result<T, E>
+     * Returns true:
+     *   if $a and $b implement Equatable, are of the same type, and are equal
+     *   if $a and $b are equal, and of the same type "==="
+     * otherwise false
      */
-    function Err($value = null): Result
+    function equals($a, $b): bool
     {
-        return Result::Err($value);
-    }
-}
+        if ($a instanceof Equatable && $b instanceof Equatable && $b instanceof $a) {
+            return $a->equals($b);
+        }
 
-if (!function_exists('Some')) {
-    /**
-     * @template T
-     *
-     * @param T $value
-     */
-    function Some($value = null): Option
-    {
-        return Option::Some($value);
-    }
-}
-
-if (!function_exists('None')) {
-    function None(): Option
-    {
-        return Option::None();
+        return $a === $b;
     }
 }

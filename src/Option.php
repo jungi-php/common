@@ -110,7 +110,7 @@ final class Some extends Option
 
     public function equals(Option $option): bool
     {
-        return $option instanceof self && Comparator::equals($this->value, $option->value);
+        return $option instanceof self && equals($this->value, $option->value);
     }
 
     public function andThen(callable $fn): Option

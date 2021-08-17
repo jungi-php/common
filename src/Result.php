@@ -234,7 +234,7 @@ final class Ok extends Result
 
     public function equals(Result $result): bool
     {
-        return $result instanceof self && Comparator::equals($this->value, $result->value);
+        return $result instanceof self && equals($this->value, $result->value);
     }
 
     public function andThen(callable $fn): Result
@@ -321,7 +321,7 @@ final class Err extends Result
 
     public function equals(Result $result): bool
     {
-        return $result instanceof self && Comparator::equals($this->value, $result->value);
+        return $result instanceof self && equals($this->value, $result->value);
     }
 
     public function andThen(callable $fn): Result

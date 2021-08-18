@@ -43,7 +43,7 @@ if (!function_exists('Some')) {
      *
      * @param T $value
      */
-    function Some($value = null): Option
+    function Some($value): Option
     {
         return Option::Some($value);
     }

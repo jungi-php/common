@@ -16,14 +16,12 @@ class FunctionsTest extends TestCase
     public function testThatTwoVariablesEqual($a, $b): void
     {
         $this->assertTrue(equals($a, $b));
-        $this->assertTrue(equals($b, $a));
     }
 
     /** @dataProvider provideNotEqualVariables */
     public function testThatTwoVariablesNotEqual($a, $b): void
     {
         $this->assertFalse(equals($a, $b));
-        $this->assertFalse(equals($b, $a));
     }
 
     /** @dataProvider providePresentValuesInIterables */
@@ -45,7 +43,8 @@ class FunctionsTest extends TestCase
         yield [1.23, 1.23];
         yield [123, 123];
         yield [[1, 2, 3], [1, 2, 3]];
-        yield [new DummyEquatable(123), new DummyEquatable(123)];
+        yield [new SameEquatable(123), new SameEquatable(123)];
+        yield [new VaryEquatable(123), 123];
     }
 
     public function provideNotEqualVariables(): iterable
@@ -57,8 +56,9 @@ class FunctionsTest extends TestCase
         yield [1.23, 123];
         yield [123, 234];
         yield [[1, 2, 3], [3, 2, 1]];
-        yield [new DummyEquatable(123), null];
-        yield [new DummyEquatable(123), new AnotherDummyEquatable(123)];
+        yield [new SameEquatable(123), null];
+        yield [new SameEquatable(123), new VaryEquatable(123)];
+        yield [new VaryEquatable(123), 234];
     }
 
     public function providePresentValuesInIterables(): iterable
@@ -83,7 +83,8 @@ class FunctionsTest extends TestCase
     }
 }
 
-trait DummyEquatableTrait
+/** @implements Equatable<SameEquatable> */
+final class SameEquatable implements Equatable
 {
     private $value;
 
@@ -92,18 +93,24 @@ trait DummyEquatableTrait
         $this->value = $value;
     }
 
-    public function equals(self $object): bool
+    public function equals(self $other): bool
     {
-        return $this->value == $object->value;
+        return $this->value == $other->value;
     }
 }
 
-final class DummyEquatable implements Equatable
+/** @implements Equatable<int> */
+final class VaryEquatable implements Equatable
 {
-    use DummyEquatableTrait;
-}
+    private int $value;
 
-final class AnotherDummyEquatable implements Equatable
-{
-    use DummyEquatableTrait;
+    public function __construct(int $value)
+    {
+        $this->value = $value;
+    }
+
+    public function equals(int $other): bool
+    {
+        return $this->value == $other;
+    }
 }

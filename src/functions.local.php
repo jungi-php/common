@@ -4,14 +4,18 @@ namespace Jungi\Common;
 
 /**
  * Returns true:
- *   if $a and $b implement Equatable, are of the same type, and are equal
+ *   if $a implements Equatable and is equal with $b
  *   if $a and $b are equal, and of the same type "==="
  * otherwise false
  */
 function equals($a, $b): bool
 {
-    if ($a instanceof Equatable && $b instanceof Equatable && $b instanceof $a) {
-        return $a->equals($b);
+    if ($a instanceof Equatable) {
+        try {
+            return $a->equals($b);
+        } catch (\TypeError $e) {
+            return false;
+        }
     }
 
     return $a === $b;

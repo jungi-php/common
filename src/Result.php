@@ -232,9 +232,9 @@ final class Ok extends Result
         return false;
     }
 
-    public function equals(Result $result): bool
+    public function equals(Result $other): bool
     {
-        return $result instanceof self && equals($this->value, $result->value);
+        return $other instanceof self && equals($this->value, $other->value);
     }
 
     public function andThen(callable $fn): Result
@@ -319,9 +319,9 @@ final class Err extends Result
         return true;
     }
 
-    public function equals(Result $result): bool
+    public function equals(Result $other): bool
     {
-        return $result instanceof self && equals($this->value, $result->value);
+        return $other instanceof self && equals($this->value, $other->value);
     }
 
     public function andThen(callable $fn): Result

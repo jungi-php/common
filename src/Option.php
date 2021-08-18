@@ -108,9 +108,9 @@ final class Some extends Option
         return false;
     }
 
-    public function equals(Option $option): bool
+    public function equals(Option $other): bool
     {
-        return $option instanceof self && equals($this->value, $option->value);
+        return $other instanceof self && equals($this->value, $other->value);
     }
 
     public function andThen(callable $fn): Option
@@ -174,9 +174,9 @@ final class None extends Option
         return true;
     }
 
-    public function equals(Option $option): bool
+    public function equals(Option $other): bool
     {
-        return $option instanceof self;
+        return $other instanceof self;
     }
 
     public function andThen(callable $fn): Option

@@ -16,3 +16,18 @@ function equals($a, $b): bool
 
     return $a === $b;
 }
+
+/**
+ * Returns true if a value is present in an iterable,
+ * otherwise false.
+ */
+function in_iterable($value, iterable $iterable): bool
+{
+    foreach ($iterable as $iteratedValue) {
+        if (equals($value, $iteratedValue)) {
+            return true;
+        }
+    }
+
+    return false;
+}

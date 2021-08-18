@@ -51,6 +51,7 @@ $v = getItem()
 ### Equatable
 
 ```php
+/** @implements Equatable<FullName> */
 class FullName implements Equatable
 {
     private string $firstName;

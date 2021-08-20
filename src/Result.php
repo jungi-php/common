@@ -95,11 +95,10 @@ abstract class Result implements Equatable
      * </code>
      *
      * @template U
-     * @template R
      *
-     * @param callable(T): Result<U, R> $fn
+     * @param callable(T): Result<U, E> $fn
      *
-     * @return Result<U, R>
+     * @return Result<U, E>
      */
     abstract public function andThenTo(callable $fn): self;
 
@@ -134,18 +133,17 @@ abstract class Result implements Equatable
      *   function calc(int $value): Result { return Ok(2 * $value); }
      *   function err($value): Result { return Err($value) }
      *
-     *   Result::Ok(2)->orElseTo('calc')->orElseTo('err').get()     // ok: 2
-     *   Result::Err(2)->orElseTo('calc')->orElseTo('err').get()    // ok: 4
-     *   Result::Err(2)->orElseTo('err')->orElseTo('calc').get()    // ok: 4
-     *   Result::Err(2)->orElseTo('err')->orElseTo('err').getErr()  // err: 2
+     *   Result::Ok(2)->orElseTo('calc')->orElseTo('err').get()    // ok: 2
+     *   Result::Err(2)->orElseTo('calc')->orElseTo('err').get()   // ok: 4
+     *   Result::Err(2)->orElseTo('err')->orElseTo('calc').get()   // ok: 4
+     *   Result::Err(2)->orElseTo('err')->orElseTo('err').getErr() // err: 2
      * </code>
      *
-     * @template U
      * @template R
      *
-     * @param callable(E): Result<U, R> $fn
+     * @param callable(E): Result<T, R> $fn
      *
-     * @return Result<U, R>
+     * @return Result<T, R>
      */
     abstract public function orElseTo(callable $fn): self;
 
@@ -182,21 +180,21 @@ abstract class Result implements Equatable
      *
      * @return E
      *
-     * @throws \LogicException If Result is ok
+     * @throws \LogicException If Result is Ok
      */
     abstract public function getErr();
 
     /**
      * Returns an Option::Some(T) where T is the ok value.
      *
-     * @return Option
+     * @return Option<T>
      */
     abstract public function asOk(): Option;
 
     /**
      * Returns an Option::Some(E) where E is the error value.
      *
-     * @return Option
+     * @return Option<E>
      */
     abstract public function asErr(): Option;
 }

@@ -150,7 +150,7 @@ class ResultTest extends TestCase
         $this->assertEquals(3, $r2->getErr());
     }
 
-    public function testThatOkResultFailsOnUnwrapErr(): void
+    public function testThatOkResultFailsOnGetErr(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Called on an "Ok" value.');
@@ -159,7 +159,7 @@ class ResultTest extends TestCase
         $result->getErr();
     }
 
-    public function testThatErrResultFailsOnUnwrap(): void
+    public function testThatErrResultFailsOnGet(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Called on an "Err" value.');

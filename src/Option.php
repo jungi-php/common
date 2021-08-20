@@ -114,6 +114,13 @@ abstract class Option implements Equatable
     abstract public function getOr($value);
 
     /**
+     * Returns some value or null on none.
+     *
+     * @return T|null
+     */
+    abstract public function getOrNull();
+
+    /**
      * Returns some value or a value returned
      * by the provided callback on none.
      *
@@ -192,6 +199,11 @@ final class Some extends Option
         return $this->value;
     }
 
+    public function getOrNull()
+    {
+        return $this->value;
+    }
+
     public function getOrElse(callable $fn)
     {
         return $this->value;
@@ -244,6 +256,11 @@ final class None extends Option
     public function getOr($value)
     {
         return $value;
+    }
+
+    public function getOrNull()
+    {
+        return null;
     }
 
     public function getOrElse(callable $fn)

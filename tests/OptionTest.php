@@ -17,7 +17,8 @@ class OptionTest extends TestCase
         $this->assertTrue($option->isSome());
         $this->assertFalse($option->isNone());
         $this->assertEquals(123, $option->get());
-        $this->assertEquals(123, $option->getOr(null));
+        $this->assertEquals(123, $option->getOr(234));
+        $this->assertEquals(123, $option->getOrNull());
         $this->assertEquals(123, $option->getOrElse(fn() => 234));
     }
 
@@ -27,7 +28,8 @@ class OptionTest extends TestCase
 
         $this->assertFalse($option->isSome());
         $this->assertTrue($option->isNone());
-        $this->assertNull($option->getOr(null));
+        $this->assertEquals(234, $option->getOr(234));
+        $this->assertNull($option->getOrNull());
         $this->assertEquals(234, $option->getOrElse(fn() => 234));
     }
 

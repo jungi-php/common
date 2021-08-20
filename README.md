@@ -10,6 +10,12 @@ Includes:
 * `Option<T>`
 * `Equatable<T>`
 
+## Installation
+
+```text
+composer require jungi/common
+```
+
 ## Quick insight
 
 ### Result

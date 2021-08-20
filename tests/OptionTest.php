@@ -59,7 +59,7 @@ class OptionTest extends TestCase
         $this->assertEquals(7, $option->get());
     }
 
-    public function testCombiningResultsByAndThenTo(): void
+    public function testCombiningOptionsByAndThenTo(): void
     {
         $op1 = Option::Some(2);
         $op2 = $op1
@@ -91,7 +91,7 @@ class OptionTest extends TestCase
         $this->assertTrue($op2->isNone());
     }
 
-    public function testThatNoneOptionFailsOnUnwrap(): void
+    public function testThatNoneOptionFailsOnGet(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('Called on an "None" value.');

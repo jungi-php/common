@@ -13,27 +13,56 @@ namespace Jungi\Common;
  */
 abstract class Option implements Equatable
 {
+    /**
+     * Option with some value.
+     *
+     * @see Some() A shorthand version
+     *
+     * @return Option<T>
+     */
     public static function Some($value): self
     {
         return new Some($value);
     }
 
+    /**
+     * Option with no value.
+     *
+     * @see None() A shorthand version
+     *
+     * @return Option<T>
+     */
     public static function None(): self
     {
         return new None();
     }
 
     /**
+     * Returns true if the Option is with some value.
+     *
      * @return bool
      */
     abstract public function isSome(): bool;
 
     /**
+     * Returns true if the Option is with no value.
+     *
      * @return bool
      */
     abstract public function isNone(): bool;
 
     /**
+     * Maps some value by using the provided callback
+     * and returns new option. Returns none if the option
+     * is none.
+     *
+     * Example:
+     *
+     * <code>
+     *   Option::Ok(2)->andThen(fn($value) => 2 * $value).get() // ok: 4
+     *   Option::None()->andThen('calc').get()                  // none, exception on get()
+     * </code>
+     *
      * @template U
      *
      * @param callable(T): U $fn
@@ -43,6 +72,21 @@ abstract class Option implements Equatable
     abstract public function andThen(callable $fn): self;
 
     /**
+     * Maps some value by using the provided callback which
+     * returns new option that can be with some or no value.
+     * Returns none if the option is none.
+     *
+     * Example:
+     *
+     * <code>
+     *   function calc(int $value): Option { return Some(2 * $value); }
+     *
+     *   Option::Some(2)->andThenTo('calc')->andThenTo('calc').get() // ok: 8
+     *   Option::Some(2)->andThenTo('calc')->andThenTo('None').get() // none, exception on get()
+     *   Option::Some(2)->andThenTo('None')->andThenTo('calc').get() // none, exception on get()
+     *   Option::None()->andThenTo('calc')->andThenTo('calc').get() // none, exception on get()
+     * </code>
+     *
      * @template U
      *
      * @param callable(T): Option<U> $fn
@@ -52,11 +96,17 @@ abstract class Option implements Equatable
     abstract public function andThenTo(callable $fn): self;
 
     /**
+     * Returns some value.
+     *
      * @return T
+     *
+     * @throws \LogicException If Option is None
      */
     abstract public function get();
 
     /**
+     * Returns some value or the provided value on none.
+     *
      * @param T $value
      *
      * @return T
@@ -64,6 +114,9 @@ abstract class Option implements Equatable
     abstract public function getOr($value);
 
     /**
+     * Returns some value or a value returned
+     * by the provided callback on none.
+     *
      * @param callable(): T $fn
      *
      * @return T
@@ -71,8 +124,14 @@ abstract class Option implements Equatable
     abstract public function getOrElse(callable $fn);
 
     /**
+     * Returns a Result::Ok(T) where T is some value
+     * or a Result::Err(E) where E is an error value.
+     *
      * @template E
+     *
      * @param E $err
+     *
+     * @return Result<T, E>
      */
     abstract public function asOkOr($err): Result;
 }
@@ -123,19 +182,11 @@ final class Some extends Option
         return $fn($this->value);
     }
 
-    /**
-     * @return T
-     */
     public function get()
     {
         return $this->value;
     }
 
-    /**
-     * @param T $value
-     *
-     * @return T
-     */
     public function getOr($value)
     {
         return $this->value;
@@ -146,10 +197,6 @@ final class Some extends Option
         return $this->value;
     }
 
-    /**
-     * @template E
-     * @param E $err
-     */
     public function asOkOr($err): Result
     {
         return Result::Ok($this->value);
@@ -204,10 +251,6 @@ final class None extends Option
         return $fn();
     }
 
-    /**
-     * @template E
-     * @param E $err
-     */
     public function asOkOr($err): Result
     {
         return Result::Err($err);

@@ -166,6 +166,13 @@ abstract class Result implements Equatable
     abstract public function getOr($value);
 
     /**
+     * Returns the ok value or null on err.
+     *
+     * @return T|null
+     */
+    abstract public function getOrNull();
+
+    /**
      * Returns the ok value or a value returned
      * by the provided callback on err.
      *
@@ -265,14 +272,19 @@ final class Ok extends Result
         return $this->value;
     }
 
-    public function getErr()
+    public function getOrNull()
     {
-        throw new \LogicException('Called on an "Ok" value.');
+        return $this->value;
     }
 
     public function getOrElse(callable $fn)
     {
         return $this->value;
+    }
+
+    public function getErr()
+    {
+        throw new \LogicException('Called on an "Ok" value.');
     }
 
     public function asOk(): Option
@@ -350,6 +362,11 @@ final class Err extends Result
     public function getOr($value)
     {
         return $value;
+    }
+
+    public function getOrNull()
+    {
+        return null;
     }
 
     public function getOrElse(callable $fn)

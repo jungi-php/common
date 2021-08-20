@@ -17,7 +17,8 @@ class ResultTest extends TestCase
         $this->assertTrue($result->isOk());
         $this->assertFalse($result->isErr());
         $this->assertEquals(123, $result->get());
-        $this->assertEquals(123, $result->getOr(null));
+        $this->assertEquals(123, $result->getOr(234));
+        $this->assertEquals(123, $result->getOrNull());
         $this->assertEquals(123, $result->getOrElse(fn($val) => 2 * $val));
     }
 
@@ -27,8 +28,9 @@ class ResultTest extends TestCase
 
         $this->assertFalse($result->isOk());
         $this->assertTrue($result->isErr());
-        $this->assertNull($result->getOr(null));
         $this->assertEquals(123, $result->getErr());
+        $this->assertEquals(234, $result->getOr(234));
+        $this->assertNull($result->getOrNull());
         $this->assertEquals(246, $result->getOrElse(fn($val) => 2 * $val));
     }
 

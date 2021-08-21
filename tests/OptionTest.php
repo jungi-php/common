@@ -12,7 +12,7 @@ class OptionTest extends TestCase
 {
     public function testSomeOption(): void
     {
-        $option = Option::Some(123);
+        $option = Option::some(123);
 
         $this->assertTrue($option->isSome());
         $this->assertFalse($option->isNone());
@@ -24,7 +24,7 @@ class OptionTest extends TestCase
 
     public function testNoneOption(): void
     {
-        $option = Option::None();
+        $option = Option::none();
 
         $this->assertFalse($option->isSome());
         $this->assertTrue($option->isNone());
@@ -42,8 +42,8 @@ class OptionTest extends TestCase
 
     public function testThatTwoOptionsNotEqual(): void
     {
-        $op1 = Option::Some(123);
-        $op2 = Option::None();
+        $op1 = Option::some(123);
+        $op2 = Option::none();
 
         $this->assertFalse($op1->equals($op2));
         $this->assertFalse($op2->equals($op1));
@@ -51,7 +51,7 @@ class OptionTest extends TestCase
 
     public function testCombiningOptionsByAndThen(): void
     {
-        $option = Option::Some(2)
+        $option = Option::some(2)
             ->andThen(fn($value) => 3 * $value)
             ->andThen(fn($value) => 1 + $value);
 
@@ -61,7 +61,7 @@ class OptionTest extends TestCase
 
     public function testCombiningOptionsByAndThenTo(): void
     {
-        $op1 = Option::Some(2);
+        $op1 = Option::some(2);
         $op2 = $op1
             ->andThenTo([__CLASS__, 'multiply'])
             ->andThenTo([__CLASS__, 'multiply']);
@@ -69,24 +69,24 @@ class OptionTest extends TestCase
         $this->assertTrue($op2->isSome());
         $this->assertEquals(8, $op2->get());
 
-        $op1 = Option::None();
+        $op1 = Option::none();
         $op2 = $op1
             ->andThenTo([__CLASS__, 'multiply'])
             ->andThenTo([__CLASS__, 'multiply']);
 
         $this->assertTrue($op2->isNone());
 
-        $op1 = Option::Some(2);
+        $op1 = Option::some(2);
         $op2 = $op1
-            ->andThenTo(fn($value) => Option::None())
+            ->andThenTo(fn($value) => Option::none())
             ->andThenTo([__CLASS__, 'multiply']);
 
         $this->assertTrue($op2->isNone());
 
-        $op1 = Option::Some(2);
+        $op1 = Option::some(2);
         $op2 = $op1
             ->andThenTo([__CLASS__, 'multiply'])
-            ->andThenTo(fn($value) => Option::None());
+            ->andThenTo(fn($value) => Option::none());
 
         $this->assertTrue($op2->isNone());
     }
@@ -94,20 +94,20 @@ class OptionTest extends TestCase
     public function testThatNoneOptionFailsOnGet(): void
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Called on an "None" value.');
+        $this->expectExceptionMessage('Called on an "none" value.');
 
-        $option = Option::None();
+        $option = Option::none();
         $option->get();
     }
 
     public function testSomeOptionAsOkOrErr(): void
     {
-        $option = Option::Some(123);
+        $option = Option::some(123);
         $result = $option->asOkOr('err');
 
         $this->assertTrue($result->isOk());
 
-        $option = Option::None();
+        $option = Option::none();
         $result = $option->asOkOr('err');
 
         $this->assertTrue($result->isErr());
@@ -116,12 +116,12 @@ class OptionTest extends TestCase
 
     public function provideEqualOptions(): iterable
     {
-        yield [Option::Some(123), Option::Some(123)];
-        yield [Option::None(), Option::None()];
+        yield [Option::some(123), Option::some(123)];
+        yield [Option::none(), Option::none()];
     }
 
     public static function multiply(int $value): Option
     {
-        return Some(2 * $value);
+        return some(2 * $value);
     }
 }

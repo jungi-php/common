@@ -16,11 +16,11 @@ abstract class Option implements Equatable
     /**
      * Option with some value.
      *
-     * @see Some() A shorthand version
+     * @see some() A shorthand version
      *
      * @return Option<T>
      */
-    public static function Some($value): self
+    public static function some($value): self
     {
         return new Some($value);
     }
@@ -28,11 +28,11 @@ abstract class Option implements Equatable
     /**
      * Option with no value.
      *
-     * @see None() A shorthand version
+     * @see none() A shorthand version
      *
      * @return Option<T>
      */
-    public static function None(): self
+    public static function none(): self
     {
         return new None();
     }
@@ -59,8 +59,8 @@ abstract class Option implements Equatable
      * Example:
      *
      * <code>
-     *   Some(2)->andThen(fn($value) => 2 * $value).get() // ok: 4
-     *   None()->andThen('calc').get()                    // none, exception on get()
+     *   some(2)->andThen(fn($value) => 2 * $value).get() // ok: 4
+     *   none()->andThen('calc').get()                    // none, exception on get()
      * </code>
      *
      * @template U
@@ -79,12 +79,12 @@ abstract class Option implements Equatable
      * Example:
      *
      * <code>
-     *   function calc(int $value): Option { return Some(2 * $value); }
+     *   function calc(int $value): Option { return some(2 * $value); }
      *
-     *   Some(2)->andThenTo('calc')->andThenTo('calc').get() // ok: 8
-     *   Some(2)->andThenTo('calc')->andThenTo('None').get() // none, exception on get()
-     *   Some(2)->andThenTo('None')->andThenTo('calc').get() // none, exception on get()
-     *   None()->andThenTo('calc')->andThenTo('calc').get()  // none, exception on get()
+     *   some(2)->andThenTo('calc')->andThenTo('calc').get() // ok: 8
+     *   some(2)->andThenTo('calc')->andThenTo('none').get() // none, exception on get()
+     *   some(2)->andThenTo('none')->andThenTo('calc').get() // none, exception on get()
+     *   none()->andThenTo('calc')->andThenTo('calc').get()  // none, exception on get()
      * </code>
      *
      * @template U
@@ -100,7 +100,7 @@ abstract class Option implements Equatable
      *
      * @return T
      *
-     * @throws \LogicException If Option is None
+     * @throws \LogicException If Option is none
      */
     abstract public function get();
 
@@ -147,7 +147,7 @@ abstract class Option implements Equatable
  * @template T
  *
  * @internal
- * @see Option::Some()
+ * @see Option::some()
  *
  * @author Piotr Kugla <piku235@gmail.com>
  */
@@ -217,7 +217,7 @@ final class Some extends Option
 
 /**
  * @internal
- * @see Option::None()
+ * @see Option::none()
  *
  * @author Piotr Kugla <piku235@gmail.com>
  */
@@ -252,7 +252,7 @@ final class None extends Option
 
     public function get()
     {
-        throw new \LogicException('Called on an "None" value.');
+        throw new \LogicException('Called on an "none" value.');
     }
 
     public function getOr($value)

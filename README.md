@@ -43,10 +43,10 @@ function getItem(): Option
 {
     // ...
     if (!$item) {
-        return None();
+        return none();
     }
     
-    return Some($item);
+    return some($item);
 }
 
 $v = getItem()

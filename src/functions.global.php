@@ -37,21 +37,21 @@ if (!function_exists('err')) {
     }
 }
 
-if (!function_exists('Some')) {
+if (!function_exists('some')) {
     /**
      * @template T
      *
      * @param T $value
      */
-    function Some($value): Option
+    function some($value): Option
     {
-        return Option::Some($value);
+        return Option::some($value);
     }
 }
 
-if (!function_exists('None')) {
-    function None(): Option
+if (!function_exists('none')) {
+    function none(): Option
     {
-        return Option::None();
+        return Option::none();
     }
 }

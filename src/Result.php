@@ -289,12 +289,12 @@ final class Ok extends Result
 
     public function asOk(): Option
     {
-        return Option::Some($this->value);
+        return Option::some($this->value);
     }
 
     public function asErr(): Option
     {
-        return Option::None();
+        return Option::none();
     }
 }
 
@@ -381,11 +381,11 @@ final class Err extends Result
 
     public function asOk(): Option
     {
-        return Option::None();
+        return Option::none();
     }
 
     public function asErr(): Option
     {
-        return Option::Some($this->value);
+        return Option::some($this->value);
     }
 }

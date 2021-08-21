@@ -23,6 +23,16 @@ class FunctionsTest extends TestCase
         $this->assertEquals(123, $r->getErr());
     }
 
+    public function testOptionAliases(): void
+    {
+        $op = some(123);
+        $this->assertTrue($op->isSome());
+        $this->assertEquals(123, $op->get());
+
+        $op = none();
+        $this->assertTrue($op->isNone());
+    }
+
     /** @dataProvider provideEqualVariables */
     public function testThatTwoVariablesEqual($a, $b): void
     {

@@ -12,6 +12,17 @@ use function Jungi\Common\in_iterable;
  */
 class FunctionsTest extends TestCase
 {
+    public function testResultAliases(): void
+    {
+        $r = ok(123);
+        $this->assertTrue($r->isOk());
+        $this->assertEquals(123, $r->get());
+
+        $r = err(123);
+        $this->assertTrue($r->isErr());
+        $this->assertEquals(123, $r->getErr());
+    }
+
     /** @dataProvider provideEqualVariables */
     public function testThatTwoVariablesEqual($a, $b): void
     {

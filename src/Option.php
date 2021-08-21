@@ -16,7 +16,7 @@ abstract class Option implements Equatable
     /**
      * Option with some value.
      *
-     * @see some() A shorthand version
+     * @see some() An alias
      *
      * @return Option<T>
      */
@@ -28,7 +28,7 @@ abstract class Option implements Equatable
     /**
      * Option with no value.
      *
-     * @see none() A shorthand version
+     * @see none() An alias
      *
      * @return Option<T>
      */

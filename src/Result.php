@@ -20,7 +20,7 @@ abstract class Result implements Equatable
      *
      * @param T $value
      *
-     * @see ok() A shorthand version
+     * @see ok() An alias
      *
      * @return Result<T, E>
      */
@@ -34,7 +34,7 @@ abstract class Result implements Equatable
      *
      * @param E $value
      *
-     * @see err() A shorthand version
+     * @see err() An alias
      *
      * @return Result<T, E>
      */

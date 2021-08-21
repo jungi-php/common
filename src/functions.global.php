@@ -7,6 +7,8 @@ if (!function_exists('ok')) {
     /**
      * Result with an ok value.
      *
+     * @see Result::ok()
+     *
      * @template T
      * @template E
      *
@@ -24,6 +26,8 @@ if (!function_exists('err')) {
     /**
      * Result with an error value.
      *
+     * @see Result::err()
+     *
      * @template T
      * @template E
      *
@@ -39,6 +43,10 @@ if (!function_exists('err')) {
 
 if (!function_exists('some')) {
     /**
+     * Option with some value.
+     *
+     * @see Option::some()
+     *
      * @template T
      *
      * @param T $value
@@ -50,6 +58,13 @@ if (!function_exists('some')) {
 }
 
 if (!function_exists('none')) {
+    /**
+     * Option with no value.
+     *
+     * @see Option::none()
+     *
+     * @return Option
+     */
     function none(): Option
     {
         return Option::none();

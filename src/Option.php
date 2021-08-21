@@ -159,7 +159,7 @@ final class Some extends Option
     /**
      * @param T $value
      */
-    public function __construct($value)
+    protected function __construct($value)
     {
         $this->value = $value;
     }
@@ -223,6 +223,8 @@ final class Some extends Option
  */
 final class None extends Option
 {
+    protected function __construct() {}
+
     public function isSome(): bool
     {
         return false;

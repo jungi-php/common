@@ -222,7 +222,7 @@ final class Ok extends Result
     /**
      * @param T $value
      */
-    public function __construct($value)
+    protected function __construct($value)
     {
         $this->value = $value;
     }
@@ -314,7 +314,7 @@ final class Err extends Result
     /**
      * @param E $value
      */
-    public function __construct($value)
+    protected function __construct($value)
     {
         $this->value = $value;
     }

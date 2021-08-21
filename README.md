@@ -2,7 +2,7 @@
 
 ![Build Status](https://github.com/piku235/jungi-common/actions/workflows/continuous-integration.yml/badge.svg)
 
-A minimal library that goal is to provide essential basic functionality. It combines the advantages of functional
+A minimal library that defines primitive building blocks of PHP code. It combines the advantages of functional
 and object-oriented programming. All of this makes code easier to understand and less prone to errors.
 
 Includes:

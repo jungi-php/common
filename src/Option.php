@@ -211,7 +211,7 @@ final class Some extends Option
 
     public function asOkOr($err): Result
     {
-        return Result::Ok($this->value);
+        return Result::ok($this->value);
     }
 }
 
@@ -272,6 +272,6 @@ final class None extends Option
 
     public function asOkOr($err): Result
     {
-        return Result::Err($err);
+        return Result::err($err);
     }
 }

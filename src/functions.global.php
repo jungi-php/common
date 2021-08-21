@@ -3,7 +3,7 @@
 use Jungi\Common\Result;
 use Jungi\Common\Option;
 
-if (!function_exists('Ok')) {
+if (!function_exists('ok')) {
     /**
      * Result with an ok value.
      *
@@ -14,13 +14,13 @@ if (!function_exists('Ok')) {
      *
      * @return Result<T, E>
      */
-    function Ok($value = null): Result
+    function ok($value = null): Result
     {
-        return Result::Ok($value);
+        return Result::ok($value);
     }
 }
 
-if (!function_exists('Err')) {
+if (!function_exists('err')) {
     /**
      * Result with an error value.
      *
@@ -31,9 +31,9 @@ if (!function_exists('Err')) {
      *
      * @return Result<T, E>
      */
-    function Err($value = null): Result
+    function err($value = null): Result
     {
-        return Result::Err($value);
+        return Result::err($value);
     }
 }
 

@@ -25,10 +25,10 @@ function submit(): Result
 {
     // ...
     if ($errors) {
-        return Err($errors);
+        return err($errors);
     }
     
-    return Ok($id);
+    return ok($id);
 }
 
 $v = submit()

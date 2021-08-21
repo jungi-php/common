@@ -3,7 +3,7 @@
 namespace Jungi\Common;
 
 /**
- * It represents either a success (Ok) or a failure (Err) result.
+ * It represents either a success (ok) or a failure (err) result.
  * Instead of throwing exceptions, a failure is an expected, recoverable error.
  *
  * @template T
@@ -20,11 +20,11 @@ abstract class Result implements Equatable
      *
      * @param T $value
      *
-     * @see Ok() A shorthand version
+     * @see ok() A shorthand version
      *
      * @return Result<T, E>
      */
-    public static function Ok($value = null): self
+    public static function ok($value = null): self
     {
         return new Ok($value);
     }
@@ -34,11 +34,11 @@ abstract class Result implements Equatable
      *
      * @param E $value
      *
-     * @see Err() A shorthand version
+     * @see err() A shorthand version
      *
      * @return Result<T, E>
      */
-    public static function Err($value = null): self
+    public static function err($value = null): self
     {
         return new Err($value);
     }
@@ -66,8 +66,8 @@ abstract class Result implements Equatable
      * <code>
      *   function calc(int $value): int { return 2 * $value; }
      *
-     *   Ok(2)->andThen('calc').get()     // ok: 4
-     *   Err(2)->andThen('calc').getErr() // err: 2
+     *   ok(2)->andThen('calc').get()     // ok: 4
+     *   err(2)->andThen('calc').getErr() // err: 2
      * </code>
      *
      * @template U
@@ -85,13 +85,13 @@ abstract class Result implements Equatable
      * Example:
      *
      * <code>
-     *   function calc(int $value): Result { return Ok(2 * $value); }
-     *   function err($value): Result { return Err($value) }
+     *   function calc(int $value): Result { return ok(2 * $value); }
+     *   function err($value): Result { return err($value) }
      *
-     *   Ok(2)->andThenTo('calc')->andThenTo('calc').get()     // ok: 8
-     *   Ok(2)->andThenTo('calc')->andThenTo('err').getErr()   // err: 4
-     *   Ok(2)->andThenTo('err')->andThenTo('calc').getErr()   // err: 2
-     *   Err(2)->andThenTo('calc')->andThenTo('calc').getErr() // err: 2
+     *   ok(2)->andThenTo('calc')->andThenTo('calc').get()     // ok: 8
+     *   ok(2)->andThenTo('calc')->andThenTo('err').getErr()   // err: 4
+     *   ok(2)->andThenTo('err')->andThenTo('calc').getErr()   // err: 2
+     *   err(2)->andThenTo('calc')->andThenTo('calc').getErr() // err: 2
      * </code>
      *
      * @template U
@@ -111,8 +111,8 @@ abstract class Result implements Equatable
      * <code>
      *   function calc(int $value): { return 2 * $value; }
      *
-     *   Ok(2)->orElse('calc').get()     // ok: 2
-     *   Err(2)->orElse('calc').getErr() // err: 4
+     *   ok(2)->orElse('calc').get()     // ok: 2
+     *   err(2)->orElse('calc').getErr() // err: 4
      * </code>
      *
      * @template R
@@ -130,13 +130,13 @@ abstract class Result implements Equatable
      * Example:
      *
      * <code>
-     *   function calc(int $value): Result { return Ok(2 * $value); }
-     *   function err($value): Result { return Err($value) }
+     *   function calc(int $value): Result { return ok(2 * $value); }
+     *   function err($value): Result { return err($value) }
      *
-     *   Ok(2)->orElseTo('calc')->orElseTo('err').get()    // ok: 2
-     *   Err(2)->orElseTo('calc')->orElseTo('err').get()   // ok: 4
-     *   Err(2)->orElseTo('err')->orElseTo('calc').get()   // ok: 4
-     *   Err(2)->orElseTo('err')->orElseTo('err').getErr() // err: 2
+     *   ok(2)->orElseTo('calc')->orElseTo('err').get()    // ok: 2
+     *   err(2)->orElseTo('calc')->orElseTo('err').get()   // ok: 4
+     *   err(2)->orElseTo('err')->orElseTo('calc').get()   // ok: 4
+     *   err(2)->orElseTo('err')->orElseTo('err').getErr() // err: 2
      * </code>
      *
      * @template R
@@ -187,7 +187,7 @@ abstract class Result implements Equatable
      *
      * @return E
      *
-     * @throws \LogicException If Result is Ok
+     * @throws \LogicException If Result is ok
      */
     abstract public function getErr();
 
@@ -210,7 +210,7 @@ abstract class Result implements Equatable
  * @template T
  *
  * @internal
- * @see Result::Ok()
+ * @see Result::ok()
  *
  * @author Piotr Kugla <piku235@gmail.com>
  */
@@ -284,7 +284,7 @@ final class Ok extends Result
 
     public function getErr()
     {
-        throw new \LogicException('Called on an "Ok" value.');
+        throw new \LogicException('Called on an "ok" value.');
     }
 
     public function asOk(): Option
@@ -302,7 +302,7 @@ final class Ok extends Result
  * @template E
  *
  * @internal
- * @see Result::Err()
+ * @see Result::err()
  *
  * @author Piotr Kugla <piku235@gmail.com>
  */
@@ -356,7 +356,7 @@ final class Err extends Result
 
     public function get()
     {
-        throw new \LogicException('Called on an "Err" value.');
+        throw new \LogicException('Called on an "err" value.');
     }
 
     public function getOr($value)

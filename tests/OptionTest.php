@@ -91,6 +91,36 @@ class OptionTest extends TestCase
         $this->assertTrue($op2->isNone());
     }
 
+    public function testCombiningOptionsByOrElseTo(): void
+    {
+        $op = Option::some(2)
+            ->orElseTo([__CLASS__, 'multiply'])
+            ->orElseTo([__CLASS__, 'multiply']);
+
+        $this->assertTrue($op->isSome());
+        $this->assertEquals(2, $op->get());
+
+        $op = Option::none()
+            ->orElseTo([Option::class, 'none'])
+            ->orElseTo([Option::class, 'none']);
+
+        $this->assertTrue($op->isNone());
+
+        $op = Option::none()
+            ->orElseTo([Option::class, 'none'])
+            ->orElseTo(fn() => Option::some(3));
+
+        $this->assertTrue($op->isSome());
+        $this->assertEquals(3, $op->get());
+
+        $op = Option::none()
+            ->orElseTo(fn() => Option::some(3))
+            ->orElseTo([Option::class, 'none']);
+
+        $this->assertTrue($op->isSome());
+        $this->assertEquals(3, $op->get());
+    }
+
     public function testThatOptionMapsOr(): void
     {
         $someFn = fn($value) => 2 * $value;

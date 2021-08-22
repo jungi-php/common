@@ -96,6 +96,17 @@ abstract class Option implements Equatable
     abstract public function andThenTo(callable $fn): self;
 
     /**
+     * If Option is with no value, it calls the provided callback
+     * to return a new option. Otherwise, it returns the option
+     * if it is with some value.
+     *
+     * @param callable(): Option<T> $fn
+     *
+     * @return Option<T>
+     */
+    abstract public function orElseTo(callable $fn): self;
+
+    /**
      * If Option is with some value, it maps its value using
      * the provided someFn callback, otherwise it returns
      * the provided value.
@@ -235,6 +246,11 @@ final class Some extends Option
         return $fn($this->value);
     }
 
+    public function orElseTo(callable $fn): Option
+    {
+        return $this;
+    }
+
     public function mapOr($value, callable $okFn)
     {
         return $okFn($this->value);
@@ -304,6 +320,11 @@ final class None extends Option
     public function andThenTo(callable $fn): Option
     {
         return $this;
+    }
+
+    public function orElseTo(callable $fn): Option
+    {
+        return $fn();
     }
 
     public function mapOr($value, callable $okFn)

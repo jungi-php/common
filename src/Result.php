@@ -148,6 +148,30 @@ abstract class Result implements Equatable
     abstract public function orElseTo(callable $fn): self;
 
     /**
+     * If Result is ok, it maps its value using the provided
+     * okFn callback. Otherwise, if Result is err, it maps
+     * its value using the provided errFn callback.
+     *
+     * Example:
+     *
+     * <code>
+     *   $okFn = fn($value) => 3 * $value;
+     *   $errFn = fn($value) => $value / 2;
+     *
+     *   ok(2)->mapOrElse($errFn, $okFn);  // 6
+     *   err(6)->mapOrElse($errFn, $okFn); // 3
+     * </code>
+     *
+     * @template U
+     *
+     * @param callable(E): U $errFn
+     * @param callable(T): U $okFn
+     *
+     * @return U
+     */
+    abstract public function mapOrElse(callable $errFn, callable $okFn);
+
+    /**
      * Returns the ok value.
      *
      * @return T
@@ -262,6 +286,11 @@ final class Ok extends Result
         return $this;
     }
 
+    public function mapOrElse(callable $errFn, callable $okFn)
+    {
+        return $okFn($this->value);
+    }
+
     public function get()
     {
         return $this->value;
@@ -352,6 +381,11 @@ final class Err extends Result
     public function orElseTo(callable $fn): Result
     {
         return $fn($this->value);
+    }
+
+    public function mapOrElse(callable $errFn, callable $okFn)
+    {
+        return $errFn($this->value);
     }
 
     public function get()

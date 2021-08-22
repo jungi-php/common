@@ -150,6 +150,15 @@ class ResultTest extends TestCase
         $this->assertEquals(3, $r2->getErr());
     }
 
+    public function testThatResultMapsOrElse(): void
+    {
+        $okFn = fn($value) => 3 * $value;
+        $errFn = fn($value) => $value / 2;
+
+        $this->assertEquals(6, Result::ok(2)->mapOrElse($errFn, $okFn));
+        $this->assertEquals(3, Result::err(6)->mapOrElse($errFn, $okFn));
+    }
+
     public function testThatOkResultFailsOnGetErr(): void
     {
         $this->expectException(\LogicException::class);

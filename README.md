@@ -5,10 +5,11 @@
 A minimal library that defines primitive building blocks of PHP code. It combines the advantages of functional
 and object-oriented programming. All of this makes code easier to understand and less prone to errors.
 
-Includes:
-* `Result<T, E>`
-* `Option<T>`
-* `Equatable<T>`
+**Primitive types:**
+
+* [`Result<T, E>`](https://piku235.gitbook.io/jungi-common/result)
+* [`Option<T>`](https://piku235.gitbook.io/jungi-common/option)
+* [`Equatable<T>`](https://piku235.gitbook.io/jungi-common/equatable)
 
 ## Installation
 
@@ -16,83 +17,6 @@ Includes:
 composer require jungi/common
 ```
 
-## Quick insight
+## Documentation
 
-### Result
-
-```php
-function submit(): Result
-{
-    // ...
-    if ($errors) {
-        return err($errors);
-    }
-    
-    return ok($id);
-}
-
-$v = submit()
-    ->andThen(fn($id) => ['id' => $id])
-    ->getOrElse(fn($errors) => formatErrors($errors));
-```
-
-### Option
-
-```php
-function getItem(): Option
-{
-    // ...
-    if (!$item) {
-        return none();
-    }
-    
-    return some($item);
-}
-
-$v = getItem()
-    ->andThen(fn($item) => itemData($item))
-    ->getOr(['code' => 'not found.']);
-```
-
-### Equatable
-
-```php
-/** @implements Equatable<FullName> */
-class FullName implements Equatable
-{
-    private string $firstName;
-    private string $lastName;
-    
-    // firstName and lastName are later initialized in the constructor
-
-    public function equals(self $fullName): bool
-    {
-        return $this->firstName === $fullName->firstName && $this->lastName === $fullName->lastName;
-    }
-}
-
-assert(true === (new FullName('David', 'Copper'))->equals(new FullName('David', 'Copper')));
-assert(false === (new FullName('David', 'Copper'))->equals(new FullName('David', 'Eton')));
-```
-
-Furthermore, there are two functions that can much ease dealing with `Equatable<T>` types.
-
-##### `equals($a, $b)`
-
-```php
-use function Jungi\Common\equals;
-
-assert(true === equals(new FullName('David', 'Copper'), new FullName('David', 'Copper')));
-assert(false === equals(new FullName('David', 'Copper'), new FullName('David', 'Aston')));
-assert(false === equals(new FullName('David', 'Copper'), null));
-```
-
-##### `in_iterable($value, iterable $iterable)`
-
-```php
-use function Jungi\Common\in_iterable;
-
-assert(true === in_iterable(new FullName('David', 'Copper'), [new FullName('David', 'Copper'), new FullName('James', 'Weston')]));
-assert(false === in_iterable(new FullName('David', 'Copper'), []));
-assert(false === in_iterable(new FullName('David', 'Copper'), [new FullName('David', 'Aston')]));
-```
+[GitBook](https://piku235.gitbook.io/jungi-common)

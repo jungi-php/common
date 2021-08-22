@@ -91,6 +91,15 @@ class OptionTest extends TestCase
         $this->assertTrue($op2->isNone());
     }
 
+    public function testThatOptionMapsOrElse(): void
+    {
+        $someFn = fn($value) => 2 * $value;
+        $noneFn = fn() => 3;
+
+        $this->assertEquals(4, Option::some(2)->mapOrElse($noneFn, $someFn));
+        $this->assertEquals(3, Option::none()->mapOrElse($noneFn, $someFn));
+    }
+
     public function testThatNoneOptionFailsOnGet(): void
     {
         $this->expectException(\LogicException::class);

@@ -35,3 +35,18 @@ function in_iterable($value, iterable $iterable): bool
 
     return false;
 }
+
+/**
+ * Returns an iterable without duplicates.
+ */
+function iterable_unique(iterable $iterable): iterable
+{
+    $seen = [];
+    foreach ($iterable as $key => $value) {
+        if (!in_iterable($value, $seen)) {
+            $seen[] = $value;
+
+            yield $key => $value;
+        }
+    }
+}

@@ -6,6 +6,7 @@ use Jungi\Common\Equatable;
 use PHPUnit\Framework\TestCase;
 use function Jungi\Common\equals;
 use function Jungi\Common\in_iterable;
+use function Jungi\Common\iterable_unique;
 
 /**
  * @author Piotr Kugla <piku235@gmail.com>
@@ -57,6 +58,17 @@ class FunctionsTest extends TestCase
         $this->assertFalse(in_iterable($value, $iterable));
     }
 
+    /** @dataProvider provideIterablesWithUniqueAndDuplicatedValues */
+    public function testThatDuplicatedIterableValuesAreRemoved(array $expected, iterable $iterable): void
+    {
+        $uniqueIterable = $this->iterableToArray(iterable_unique($iterable));
+
+        $this->assertCount(count($expected), $uniqueIterable);
+        $this->assertEmpty(array_udiff_assoc($expected, $uniqueIterable, function ($a, $b) {
+            return equals($a, $b) ? 0 : ($a > $b ? 1 : -1);
+        }));
+    }
+
     public function provideEqualVariables(): iterable
     {
         yield [null, null];
@@ -101,6 +113,31 @@ class FunctionsTest extends TestCase
         yield [[1, 2], [[2, 3], [3, 4]]];
         yield ['foo', ['bar', 'zip']];
         yield [new SameEquatable(123), [new SameEquatable(234), new SameEquatable(345)]];
+    }
+
+    public function provideIterablesWithUniqueAndDuplicatedValues(): iterable
+    {
+        yield [[], []];
+        yield [[null], [null, null]];
+        yield [[1, 2, 3 => 3], [1, 2, 2, 3, 2]];
+        yield [['foo'], ['foo', 'foo']];
+        yield [['foo', ''], ['foo', '']];
+        yield [[true, false], [true, false, true]];
+        yield [[1.23, 2.34], [1.23, 2.34, 1.23]];
+        yield [
+            [new SameEquatable(123), new SameEquatable(345), 3 => new SameEquatable(321)],
+            [new SameEquatable(123), new SameEquatable(345), new SameEquatable(123), new SameEquatable(321)]
+        ];
+    }
+
+    private function iterableToArray(iterable $iterable): array
+    {
+        $arr = [];
+        foreach ($iterable as $key => $value) {
+            $arr[$key] = $value;
+        }
+
+        return $arr;
     }
 }
 

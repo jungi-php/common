@@ -1,6 +1,7 @@
 # Jungi Common
 
-![Build Status](https://github.com/piku235/jungi-common/actions/workflows/continuous-integration.yml/badge.svg)
+[![CI](https://github.com/piku235/jungi-common/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/piku235/jungi-common/actions/workflows/continuous-integration.yml)
+![PHP](https://img.shields.io/packagist/php-v/jungi/common)
 
 A minimal library that defines primitive building blocks of PHP code. It combines the advantages of functional
 and object-oriented programming. All of this makes code easier to understand and less prone to errors.

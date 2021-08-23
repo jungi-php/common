@@ -3,7 +3,7 @@
 namespace Jungi\Common;
 
 /**
- * Tells if objects of the same type are equal.
+ * Tells whether an object is equal to other value of type T.
  *
  * @template T
  *

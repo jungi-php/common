@@ -66,8 +66,8 @@ abstract class Result implements Equatable
      * <code>
      *   function calc(int $value): int { return 2 * $value; }
      *
-     *   ok(2)->andThen('calc').get()     // ok: 4
-     *   err(2)->andThen('calc').getErr() // err: 2
+     *   ok(2)->andThen('calc')->get()     // ok: 4
+     *   err(2)->andThen('calc')->getErr() // err: 2
      * </code>
      *
      * @template U
@@ -88,10 +88,10 @@ abstract class Result implements Equatable
      *   function calc(int $value): Result { return ok(2 * $value); }
      *   function err($value): Result { return err($value) }
      *
-     *   ok(2)->andThenTo('calc')->andThenTo('calc').get()     // ok: 8
-     *   ok(2)->andThenTo('calc')->andThenTo('err').getErr()   // err: 4
-     *   ok(2)->andThenTo('err')->andThenTo('calc').getErr()   // err: 2
-     *   err(2)->andThenTo('calc')->andThenTo('calc').getErr() // err: 2
+     *   ok(2)->andThenTo('calc')->andThenTo('calc')->get()     // ok: 8
+     *   ok(2)->andThenTo('calc')->andThenTo('err')->getErr()   // err: 4
+     *   ok(2)->andThenTo('err')->andThenTo('calc')->getErr()   // err: 2
+     *   err(2)->andThenTo('calc')->andThenTo('calc')->getErr() // err: 2
      * </code>
      *
      * @template U
@@ -111,8 +111,8 @@ abstract class Result implements Equatable
      * <code>
      *   function calc(int $value): { return 2 * $value; }
      *
-     *   ok(2)->orElse('calc').get()     // ok: 2
-     *   err(2)->orElse('calc').getErr() // err: 4
+     *   ok(2)->orElse('calc')->get()     // ok: 2
+     *   err(2)->orElse('calc')->getErr() // err: 4
      * </code>
      *
      * @template R
@@ -133,10 +133,10 @@ abstract class Result implements Equatable
      *   function calc(int $value): Result { return ok(2 * $value); }
      *   function err($value): Result { return err($value) }
      *
-     *   ok(2)->orElseTo('calc')->orElseTo('err').get()    // ok: 2
-     *   err(2)->orElseTo('calc')->orElseTo('err').get()   // ok: 4
-     *   err(2)->orElseTo('err')->orElseTo('calc').get()   // ok: 4
-     *   err(2)->orElseTo('err')->orElseTo('err').getErr() // err: 2
+     *   ok(2)->orElseTo('calc')->orElseTo('err')->get()    // ok: 2
+     *   err(2)->orElseTo('calc')->orElseTo('err')->get()   // ok: 4
+     *   err(2)->orElseTo('err')->orElseTo('calc')->get()   // ok: 4
+     *   err(2)->orElseTo('err')->orElseTo('err')->getErr() // err: 2
      * </code>
      *
      * @template R

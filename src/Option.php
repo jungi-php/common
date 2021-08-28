@@ -59,8 +59,8 @@ abstract class Option implements Equatable
      * Example:
      *
      * <code>
-     *   some(2)->andThen(fn($value) => 2 * $value).get() // ok: 4
-     *   none()->andThen('calc').get()                    // none, exception on get()
+     *   some(2)->andThen(fn($value) => 2 * $value)->get() // ok: 4
+     *   none()->andThen('calc')->get()                    // none, exception on get()
      * </code>
      *
      * @template U
@@ -81,10 +81,10 @@ abstract class Option implements Equatable
      * <code>
      *   function calc(int $value): Option { return some(2 * $value); }
      *
-     *   some(2)->andThenTo('calc')->andThenTo('calc').get() // ok: 8
-     *   some(2)->andThenTo('calc')->andThenTo('none').get() // none, exception on get()
-     *   some(2)->andThenTo('none')->andThenTo('calc').get() // none, exception on get()
-     *   none()->andThenTo('calc')->andThenTo('calc').get()  // none, exception on get()
+     *   some(2)->andThenTo('calc')->andThenTo('calc')->get() // ok: 8
+     *   some(2)->andThenTo('calc')->andThenTo('none')->get() // none, exception on get()
+     *   some(2)->andThenTo('none')->andThenTo('calc')->get() // none, exception on get()
+     *   none()->andThenTo('calc')->andThenTo('calc')->get()  // none, exception on get()
      * </code>
      *
      * @template U

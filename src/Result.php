@@ -58,7 +58,7 @@ abstract class Result implements Equatable
     }
 
     /**
-     * Returns true if the Result is ok.
+     * Returns true if the result is ok.
      *
      * Example:
      *
@@ -72,7 +72,7 @@ abstract class Result implements Equatable
     abstract public function isOk(): bool;
 
     /**
-     * Returns true if the Result is err.
+     * Returns true if the result is err.
      *
      * Example:
      *
@@ -86,8 +86,24 @@ abstract class Result implements Equatable
     abstract public function isErr(): bool;
 
     /**
+     * Returns true if this result equals another result.
+     *
+     * Example:
+     *
+     * <code>
+     *   assert(true === ok(2)->equals(ok(2)));
+     *   assert(true === err(3)->equals(err(3)));
+     *   assert(false === ok(2)->equals(ok('2')));
+     *   assert(false === ok(2)->equals(err(2)));
+     * </code>
+     *
+     * @param Result<T, E> $other
+     */
+    abstract public function equals(self $other): bool;
+
+    /**
      * Maps the ok value by using the provided callback
-     * and returns new result, leaving the error value untouched.
+     * and returns a new result, leaving the error value untouched.
      *
      * Example:
      *
@@ -108,7 +124,7 @@ abstract class Result implements Equatable
 
     /**
      * Maps the ok value by using the provided callback which
-     * returns new result that can be either ok or err.
+     * returns a new result that can be either ok or err.
      *
      * Example:
      *
@@ -132,12 +148,12 @@ abstract class Result implements Equatable
 
     /**
      * Maps the error value by using the provided callback
-     * and returns new result, leaving the ok value untouched.
+     * and returns a new result, leaving the ok value untouched.
      *
      * Example:
      *
      * <code>
-     *   function mul(int $value): { return 2 * $value; }
+     *   function mul(int $value): int { return 2 * $value; }
      *
      *   assert(2 === ok(2)->orElse('mul')->get());
      *   assert(4 === err(2)->orElse('mul')->getErr());
@@ -153,7 +169,7 @@ abstract class Result implements Equatable
 
     /**
      * Maps the error value by using the provided callback which
-     * returns new result that can be either ok or err.
+     * returns a new result that can be either ok or err.
      *
      * Example:
      *
@@ -176,14 +192,13 @@ abstract class Result implements Equatable
     abstract public function orElseTo(callable $fn): self;
 
     /**
-     * If Result is ok, it maps its value using the provided
-     * okFn callback. Otherwise, if Result is err, it returns
-     * the provided value.
+     * If the result is ok, it maps its value using the provided
+     * $okFn callback. Otherwise, returns the untouched result.
      *
      * Example:
      *
      * <code>
-     *   function mul(int $value) { return 3 * $value; }
+     *   function mul(int $value): int { return 3 * $value; }
      *
      *   assert(6 === ok(2)->mapOr(3, 'mul'));
      *   assert(3 === err(6)->mapOr(3, 'mul'));
@@ -199,18 +214,18 @@ abstract class Result implements Equatable
     abstract public function mapOr($value, callable $okFn);
 
     /**
-     * If Result is ok, it maps its value using the provided
-     * okFn callback. Otherwise, if Result is err, it maps
-     * its value using the provided errFn callback.
+     * If the result is ok, it maps its value using the provided
+     * $okFn callback. Otherwise, if the result is err, it maps
+     * its value using the provided $errFn callback.
      *
      * Example:
      *
      * <code>
-     *   function mul(int $value) { return 3 * $value; }
-     *   function div(int $value) { return $value / 2; }
+     *   function mul(int $value): int { return 3 * $value; }
+     *   function sum(int $value): int { return 2 + $value; }
      *
-     *   assert(6 === ok(2)->mapOrElse('div', 'mul'));
-     *   assert(3 === err(6)->mapOrElse('div', 'mul'));
+     *   assert(6 === ok(2)->mapOrElse('sum', 'mul'));
+     *   assert(3 === err(6)->mapOrElse('sum', 'mul'));
      * </code>
      *
      * @template U
@@ -234,7 +249,7 @@ abstract class Result implements Equatable
      *
      * @return T
      *
-     * @throws \LogicException If Result is err
+     * @throws \LogicException If result is err
      */
     abstract public function get();
 
@@ -275,7 +290,7 @@ abstract class Result implements Equatable
      * Example:
      *
      * <code>
-     *   function mul(int $value) { return 3 * $value; }
+     *   function mul(int $value): int { return 3 * $value; }
      *
      *   assert(2 === ok(2)->getOrElse('mul'));
      *   assert(9 === err(3)->getOrElse('mul'));
@@ -299,12 +314,12 @@ abstract class Result implements Equatable
      *
      * @return E
      *
-     * @throws \LogicException If Result is ok
+     * @throws \LogicException If result is ok
      */
     abstract public function getErr();
 
     /**
-     * Returns an Option::Some(T) where T is the ok value.
+     * Returns Option::Some(T) where T is the ok value.
      *
      * Example:
      *
@@ -318,7 +333,7 @@ abstract class Result implements Equatable
     abstract public function asOk(): Option;
 
     /**
-     * Returns an Option::Some(E) where E is the error value.
+     * Returns Option::Some(E) where E is the error value.
      *
      * Example:
      *

@@ -16,6 +16,13 @@ abstract class Option implements Equatable
     /**
      * Option with some value.
      *
+     * Example:
+     *
+     * <code>
+     *   Option::some(2);
+     *   some(2); // alias
+     * </code>
+     *
      * @see some() An alias
      *
      * @return Option<T>
@@ -28,6 +35,13 @@ abstract class Option implements Equatable
     /**
      * Option with no value.
      *
+     * Example:
+     *
+     * <code>
+     *   Option::none();
+     *   none(); // alias
+     * </code>
+     *
      * @see none() An alias
      *
      * @return Option<T>
@@ -38,29 +52,61 @@ abstract class Option implements Equatable
     }
 
     /**
-     * Returns true if the Option is with some value.
+     * Returns true if the option is with some value.
+     *
+     * Example:
+     *
+     * <code>
+     *   assert(true === some(2)->isSome());
+     *   assert(false === none()->isSome());
+     * </code>
      *
      * @return bool
      */
     abstract public function isSome(): bool;
 
     /**
-     * Returns true if the Option is with no value.
+     * Returns true if the option is with no value.
+     *
+     * Example:
+     *
+     * <code>
+     *   assert(true === none()->isNone());
+     *   assert(false === some(2)->isNone());
+     * </code>
      *
      * @return bool
      */
     abstract public function isNone(): bool;
 
     /**
+     * Returns true if this option equals other option.
+     *
+     * Example:
+     *
+     * <code>
+     *   assert(true === some(2)->equals(some(2)));
+     *   assert(true === none()->equals(none()));
+     *   assert(false === some(2)->equals(some('2')));
+     *   assert(false === none()->equals(some(2)));
+     * </code>
+     *
+     * @param Option<T> $other
+     */
+    abstract public function equals(self $other): bool;
+
+    /**
      * Maps some value by using the provided callback
-     * and returns new option. Returns none if the option
+     * and returns a new option. Returns none if the option
      * is none.
      *
      * Example:
      *
      * <code>
-     *   some(2)->andThen(fn($value) => 2 * $value)->get() // ok: 4
-     *   none()->andThen('calc')->get()                    // none, exception on get()
+     *   function mul(int $value): int { return 2 * $value; }
+     *
+     *   assert(4 === some(2)->andThen('mul')->get());
+     *   assert(true === none()->andThen('mul')->isNone());
      * </code>
      *
      * @template U
@@ -73,18 +119,18 @@ abstract class Option implements Equatable
 
     /**
      * Maps some value by using the provided callback which
-     * returns new option that can be with some or no value.
+     * returns a new option that can be with some or no value.
      * Returns none if the option is none.
      *
      * Example:
      *
      * <code>
-     *   function calc(int $value): Option { return some(2 * $value); }
+     *   function mul(int $value): Option { return some(2 * $value); }
      *
-     *   some(2)->andThenTo('calc')->andThenTo('calc')->get() // ok: 8
-     *   some(2)->andThenTo('calc')->andThenTo('none')->get() // none, exception on get()
-     *   some(2)->andThenTo('none')->andThenTo('calc')->get() // none, exception on get()
-     *   none()->andThenTo('calc')->andThenTo('calc')->get()  // none, exception on get()
+     *   assert(8 === some(2)->andThenTo('mul')->andThenTo('mul')->get());
+     *   assert(true === some(2)->andThenTo('mul')->andThenTo('none')->isNone());
+     *   assert(true === some(2)->andThenTo('none')->andThenTo('mul')->isNone());
+     *   assert(true === none()->andThenTo('mul')->andThenTo('mul')->isNone());
      * </code>
      *
      * @template U
@@ -96,9 +142,19 @@ abstract class Option implements Equatable
     abstract public function andThenTo(callable $fn): self;
 
     /**
-     * If Option is with no value, it calls the provided callback
-     * to return a new option. Otherwise, it returns the option
-     * if it is with some value.
+     * If the option is with no value, it calls the provided callback
+     * to return a new option. Otherwise, it returns the untouched option.
+     *
+     * Example:
+     *
+     * <code>
+     *   function def(): Option { return some(3); }
+     *
+     *   assert(3 === none()->orElseTo('none')->orElseTo('def')->get());
+     *   assert(3 === none()->orElseTo('def')->orElseTo('none')->get());
+     *   assert(5 === some(5)->orElseTo('def')->orElseTo('none')->get());
+     *   assert(true === none()->orElseTo('none')->orElseTo('none')->isNone());
+     * </code>
      *
      * @param callable(): Option<T> $fn
      *
@@ -107,17 +163,17 @@ abstract class Option implements Equatable
     abstract public function orElseTo(callable $fn): self;
 
     /**
-     * If Option is with some value, it maps its value using
-     * the provided someFn callback, otherwise it returns
+     * If the option is with some value, it maps its value using
+     * the provided $someFn callback, otherwise it returns
      * the provided value.
      *
      * Example:
      *
      * <code>
-     *   $someFn = fn($value) => 2 * $value;
+     *   function mul(int $value): int { return 2 * $value; }
      *
-     *   some(2)->mapOrElse(3, $someFn); // 4
-     *   none()->mapOrElse(3, $someFn);  // 3
+     *   assert(4 === some(2)->mapOrElse(3, 'mul'));
+     *   assert(3 === none()->mapOrElse(3, 'mul'));
      * </code>
      *
      * @template U
@@ -130,17 +186,17 @@ abstract class Option implements Equatable
     abstract public function mapOr($value, callable $someFn);
 
     /**
-     * If Option is with some value, it maps its value using
-     * the provided someFn callback, otherwise it calls noneFn callback.
+     * If the option is with some value, it maps its value using
+     * the provided $someFn callback, otherwise it calls $noneFn callback.
      *
      * Example:
      *
      * <code>
-     *   $someFn = fn($value) => 2 * $value;
-     *   $noneFn = fn() => 3;
+     *   function mul(int $value): int { return 2 * $value; }
+     *   function def(): int { return 3; }
      *
-     *   some(2)->mapOrElse($noneFn, $someFn); // 4
-     *   none()->mapOrElse($noneFn, $someFn);  // 3
+     *   assert(4 === some(2)->mapOrElse('def', 'mul'));
+     *   assert(3 === none()->mapOrElse('def', 'mul'));
      * </code>
      *
      * @template U
@@ -155,14 +211,28 @@ abstract class Option implements Equatable
     /**
      * Returns some value.
      *
+     * Example:
+     *
+     * <code>
+     *   assert(2 === some(2)->get());
+     *   none()->get(); // throws an exception
+     * </code>
+     *
      * @return T
      *
-     * @throws \LogicException If Option is none
+     * @throws \LogicException If option is none
      */
     abstract public function get();
 
     /**
      * Returns some value or the provided value on none.
+     *
+     * Example:
+     *
+     * <code>
+     *   assert(2 === some(2)->getOr(3));
+     *   assert(3 === none()->getOr(3));
+     * </code>
      *
      * @param T $value
      *
@@ -172,6 +242,13 @@ abstract class Option implements Equatable
 
     /**
      * Returns some value or null on none.
+     *
+     * Example:
+     *
+     * <code>
+     *   assert(2 === some(2)->getOrNull());
+     *   assert(null === none()->getOrNull());
+     * </code>
      *
      * @return T|null
      */
@@ -188,8 +265,15 @@ abstract class Option implements Equatable
     abstract public function getOrElse(callable $fn);
 
     /**
-     * Returns a Result::Ok(T) where T is some value
-     * or a Result::Err(E) where E is an error value.
+     * Returns Result::Ok(T) where T is some value
+     * or Result::Err(E) where E is an error value.
+     *
+     * Example:
+     *
+     * <code>
+     *   assert(2 === some(2)->asOkOr(3)->get());
+     *   assert(3 === none()->asOkOr(3)->getErr());
+     * </code>
      *
      * @template E
      *

@@ -130,7 +130,6 @@ abstract class Result implements Equatable
      *
      * <code>
      *   function mul(int $value): Result { return ok(2 * $value); }
-     *   function err($value): Result { return err($value); }
      *
      *   assert(8 === ok(2)->andThenTo('mul')->andThenTo('mul')->get());
      *   assert(4 === ok(2)->andThenTo('mul')->andThenTo('err')->getErr());
@@ -175,7 +174,6 @@ abstract class Result implements Equatable
      *
      * <code>
      *   function mul(int $value): Result { return ok(2 * $value); }
-     *   function err($value): Result { return err($value); }
      *
      *   assert(2 === ok(2)->orElseTo('mul')->orElseTo('err')->get());
      *   assert(4 === err(2)->orElseTo('mul')->orElseTo('err')->get());
@@ -225,7 +223,7 @@ abstract class Result implements Equatable
      *   function sum(int $value): int { return 2 + $value; }
      *
      *   assert(6 === ok(2)->mapOrElse('sum', 'mul'));
-     *   assert(3 === err(6)->mapOrElse('sum', 'mul'));
+     *   assert(5 === err(3)->mapOrElse('sum', 'mul'));
      * </code>
      *
      * @template U
@@ -244,7 +242,7 @@ abstract class Result implements Equatable
      *
      * <code>
      *   assert(2 === ok(2)->get());
-     *   err('msg')->get(); // throws an exception
+     *   err(1)->get(); // throws an exception
      * </code>
      *
      * @return T
@@ -260,7 +258,7 @@ abstract class Result implements Equatable
      *
      * <code>
      *   assert(2 === ok(2)->getOr(3));
-     *   assert(3 === err('msg')->getOr(3));
+     *   assert(3 === err(1)->getOr(3));
      * </code>
      *
      * @param T $value
@@ -276,7 +274,7 @@ abstract class Result implements Equatable
      *
      * <code>
      *   assert(2 === ok(2)->getOrNull());
-     *   assert(null === err('msg')->getOrNull());
+     *   assert(null === err(1)->getOrNull());
      * </code>
      *
      * @return T|null
@@ -309,7 +307,7 @@ abstract class Result implements Equatable
      *
      * <code>
      *   assert(3 === err(3)->getErr());
-     *   ok('msg')->getErr(); // throws an exception
+     *   ok(1)->getErr(); // throws an exception
      * </code>
      *
      * @return E

@@ -6,6 +6,7 @@ use Jungi\Common\Equatable;
 use PHPUnit\Framework\TestCase;
 use function Jungi\Common\equals;
 use function Jungi\Common\in_iterable;
+use function Jungi\Common\iterable_search;
 use function Jungi\Common\iterable_unique;
 
 /**
@@ -69,6 +70,18 @@ class FunctionsTest extends TestCase
         }));
     }
 
+    /** @dataProvider provideIterablesWithExistingKeys */
+    public function testThatKeyIsReturnedFromIterable($expectedKey, $value, iterable $iterable): void
+    {
+        $this->assertSame($expectedKey, iterable_search($value, $iterable));
+    }
+
+    /** @dataProvider provideIterablesWithNonExistingKeys */
+    public function testThatKeyIsNotReturnedFromIterable($value, iterable $iterable): void
+    {
+        $this->assertFalse(iterable_search($value, $iterable));
+    }
+
     public function provideEqualVariables(): iterable
     {
         yield [null, null];
@@ -128,6 +141,40 @@ class FunctionsTest extends TestCase
             [new SameEquatable(123), new SameEquatable(345), 3 => new SameEquatable(321)],
             [new SameEquatable(123), new SameEquatable(345), new SameEquatable(123), new SameEquatable(321)]
         ];
+    }
+
+    public function provideIterablesWithExistingKeys(): iterable
+    {
+        yield ['bar', 2, [
+            'foo' => 1,
+            'bar' => 2,
+            'zoo' => 2
+        ]];
+        yield ['bar', new SameEquatable(2), [
+            'foo' => 1,
+            'bar' => new SameEquatable(2),
+            'zoo' => new SameEquatable(2)
+        ]];
+        yield ['zoo', new VaryEquatable(2), [
+            'foo' => 1,
+            'bar' => new SameEquatable(2),
+            'zoo' => 2
+        ]];
+    }
+
+    public function provideIterablesWithNonExistingKeys(): iterable
+    {
+        yield [0, []];
+        yield [0, [
+            'foo' => 1,
+            'bar' => 2,
+            'zoo' => 2
+        ]];
+        yield [new SameEquatable(1), [
+            'foo' => 1,
+            'bar' => new SameEquatable(2),
+            'zoo' => new SameEquatable(2)
+        ]];
     }
 
     private function iterableToArray(iterable $iterable): array

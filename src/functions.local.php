@@ -50,3 +50,23 @@ function iterable_unique(iterable $iterable): iterable
         }
     }
 }
+
+/**
+ * Returns the first key where the given value is equal.
+ * If the value is not found, false is returned.
+ *
+ * @param mixed    $value
+ * @param iterable $iterable
+ *
+ * @return mixed A key or false otherwise
+ */
+function iterable_search($value, iterable $iterable)
+{
+    foreach ($iterable as $key => $iteratedValue) {
+        if (equals($value, $iteratedValue)) {
+            return $key;
+        }
+    }
+
+    return false;
+}

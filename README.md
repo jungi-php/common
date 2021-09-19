@@ -1,6 +1,6 @@
 # Jungi Common
 
-[![CI](https://github.com/piku235/jungi-common/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/piku235/jungi-common/actions/workflows/continuous-integration.yml)
+[![CI](https://github.com/jungi-php/common/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/jungi-php/common/actions/workflows/continuous-integration.yml)
 ![PHP](https://img.shields.io/packagist/php-v/jungi/common)
 
 A minimal library that defines primitive building blocks of PHP code. It combines the advantages of functional

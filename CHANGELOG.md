@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2021-10-30
+
 ### Added
 - Function `iterable_search()` that returns the first key where the given value is equal.
 
-[unreleased]: https://github.com/jungi-php/common/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/jungi-php/common/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/jungi-php/common/compare/v1.0.0...v1.1.0

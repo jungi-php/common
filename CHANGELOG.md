@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Template type declaration at `Equatable::equals()`. PHPStorm 2022.1 now handles generics types in @method tags, and it's also helpful when using an analysis tool.
+
 ## [1.1.0] - 2021-10-30
 
 ### Added

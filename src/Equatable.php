@@ -9,7 +9,7 @@ namespace Jungi\Common;
  *
  * @author Piotr Kugla <piku235@gmail.com>
  *
- * @method bool equals($other)
+ * @method bool equals(T $other)
  */
 interface Equatable
 {

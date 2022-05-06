@@ -7,6 +7,9 @@ namespace Jungi\Common;
  *   if $a implements Equatable and is equal with $b
  *   if $a and $b are equal, and of the same type "==="
  * otherwise false
+ *
+ * @param mixed $a
+ * @param mixed $b
  */
 function equals($a, $b): bool
 {
@@ -24,6 +27,8 @@ function equals($a, $b): bool
 /**
  * Returns true if a value is present in an iterable,
  * otherwise false.
+ *
+ * @param mixed $value
  */
 function in_iterable($value, iterable $iterable): bool
 {
@@ -38,6 +43,8 @@ function in_iterable($value, iterable $iterable): bool
 
 /**
  * Returns an iterable without duplicates.
+ *
+ * @param iterable $iterable
  */
 function iterable_unique(iterable $iterable): iterable
 {

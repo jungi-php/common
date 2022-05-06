@@ -23,6 +23,8 @@ abstract class Option implements Equatable
      *   some(2); // alias
      * </code>
      *
+     * @param T $value
+     *
      * @see some() An alias
      *
      * @return Option<T>

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Template type declaration at `Equatable::equals()`. PHPStorm 2022.1 now handles generics types in @method tags, and it's also helpful when using an analysis tool.
 - Missing @param tag at `Option::some()`
 - Missing @param tags in local functions
+- Missing @template tags in static methods of `Result`
 
 ## [1.1.0] - 2021-10-30
 

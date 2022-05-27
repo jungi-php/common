@@ -25,6 +25,9 @@ abstract class Result implements Equatable
      *   ok(2); // alias
      * </code>
      *
+     * @template T
+     * @template E
+     *
      * @param T $value
      *
      * @see ok() An alias
@@ -45,6 +48,9 @@ abstract class Result implements Equatable
      *   Result::err(3);
      *   err(3); // alias
      * </code>
+     *
+     * @template T
+     * @template E
      *
      * @param E $value
      *

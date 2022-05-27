@@ -341,14 +341,14 @@ final class Some extends Option
         return $this;
     }
 
-    public function mapOr($value, callable $okFn)
+    public function mapOr($value, callable $someFn)
     {
-        return $okFn($this->value);
+        return $someFn($this->value);
     }
 
-    public function mapOrElse(callable $errFn, callable $okFn)
+    public function mapOrElse(callable $noneFn, callable $someFn)
     {
-        return $okFn($this->value);
+        return $someFn($this->value);
     }
 
     public function get()
@@ -417,14 +417,14 @@ final class None extends Option
         return $fn();
     }
 
-    public function mapOr($value, callable $okFn)
+    public function mapOr($value, callable $someFn)
     {
         return $value;
     }
 
-    public function mapOrElse(callable $errFn, callable $okFn)
+    public function mapOrElse(callable $noneFn, callable $someFn)
     {
-        return $errFn();
+        return $noneFn();
     }
 
     public function get()

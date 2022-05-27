@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2022-05-27
+
 ### Added
 - Template type declaration at `Equatable::equals()`. PHPStorm 2022.1 now handles generics types in @method tags, and it's also helpful when using an analysis tool.
 - Missing @param tag at `Option::some()`
@@ -19,5 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Function `iterable_search()` that returns the first key where the given value is equal.
 
-[unreleased]: https://github.com/jungi-php/common/compare/v1.1.0...HEAD
+[unreleased]: https://github.com/jungi-php/common/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/jungi-php/common/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/jungi-php/common/compare/v1.0.0...v1.1.0

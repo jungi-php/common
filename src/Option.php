@@ -23,6 +23,8 @@ abstract class Option implements Equatable
      *   some(2); // alias
      * </code>
      *
+     * @template T
+     *
      * @param T $value
      *
      * @see some() An alias
@@ -43,6 +45,8 @@ abstract class Option implements Equatable
      *   Option::none();
      *   none(); // alias
      * </code>
+     *
+     * @template T
      *
      * @see none() An alias
      *

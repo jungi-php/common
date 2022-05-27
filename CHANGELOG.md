@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Missing @param tag at `Option::some()`
 - Missing @param tags in local functions
 - Missing @template tags in static methods of `Result`
+- Missing @template tags in static methods of `Option`
 
 ## [1.1.0] - 2021-10-30
 

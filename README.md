@@ -120,8 +120,8 @@ class Phone implements Equatable
     }
 }
 
-assert(true === new Phone('(321) 456-1234')->equals(new Phone('(321) 456-1234')));
-assert(false === new Phone('(321) 456-1234')->equals(new Phone('(454) 456-1234')));
+assert(true === (new Phone('(321) 456-1234'))->equals(new Phone('(321) 456-1234')));
+assert(false === (new Phone('(321) 456-1234'))->equals(new Phone('(454) 456-1234')));
 ```
 
 ### Functions

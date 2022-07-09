@@ -4,6 +4,7 @@ namespace Jungi\Common\Tests;
 
 use Jungi\Common\Equatable;
 use PHPUnit\Framework\TestCase;
+use function Jungi\Common\array_equals;
 use function Jungi\Common\equals;
 use function Jungi\Common\in_iterable;
 use function Jungi\Common\iterable_search;
@@ -80,6 +81,18 @@ class FunctionsTest extends TestCase
     public function testThatKeyIsNotReturnedFromIterable($value, iterable $iterable): void
     {
         $this->assertFalse(iterable_search($value, $iterable));
+    }
+
+    /** @dataProvider provideEqualArrays */
+    public function testThatArraysEqual(array $a, array $b): void
+    {
+        $this->assertTrue(array_equals($a, $b));
+    }
+
+    /** @dataProvider provideNotEqualArrays */
+    public function testThatArraysNotEqual(array $a, array $b): void
+    {
+        $this->assertFalse(array_equals($a, $b));
     }
 
     public function provideEqualVariables(): iterable
@@ -175,6 +188,28 @@ class FunctionsTest extends TestCase
             'bar' => new SameEquatable(2),
             'zoo' => new SameEquatable(2)
         ]];
+    }
+
+    public function provideEqualArrays(): iterable
+    {
+        yield [[], []];
+        yield [[null], [null]];
+        yield [[1 => 'foo', 0 => 'bar'], ['bar', 'foo']];
+        yield [[1.23, 2.34], [1.23, 2.34]];
+        yield [[new SameEquatable(123), new SameEquatable(234)], [new SameEquatable(123), new SameEquatable(234)]];
+        yield [[new VaryEquatable(123)], [123]];
+    }
+
+    public function provideNotEqualArrays(): iterable
+    {
+        yield [[], [null]];
+        yield [[false], [null]];
+        yield [['foo'], []];
+        yield [['foo'], ['foo', 'bar']];
+        yield [['foo', 'bar'], ['foo']];
+        yield [['foo', 'bar'], ['bar', 'foo']];
+        yield [[new SameEquatable(123)], [new SameEquatable(234)]];
+        yield [[123], [new VaryEquatable(123)]];
     }
 
     private function iterableToArray(iterable $iterable): array

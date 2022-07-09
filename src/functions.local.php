@@ -77,3 +77,27 @@ function iterable_search($value, iterable $iterable)
 
     return false;
 }
+
+/**
+ * Returns true if both arrays have the same keys
+ * and their values are equal.
+ *
+ * @param array $a
+ * @param array $b
+ *
+ * @return bool
+ */
+function array_equals(array $a, array $b): bool
+{
+    if (count($a) !== count($b)) {
+        return false;
+    }
+
+    foreach ($a as $key => $value) {
+        if (!array_key_exists($key, $b) || !equals($value, $b[$key])) {
+            return false;
+        }
+    }
+
+    return true;
+}

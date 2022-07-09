@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2022-07-09
+
 ### Added
 - Function `array_equals()` that checks if both arrays have the same keys and their values are equal
 
@@ -24,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Function `iterable_search()` that returns the first key where the given value is equal.
 
-[unreleased]: https://github.com/jungi-php/common/compare/v1.1.1...HEAD
+[unreleased]: https://github.com/jungi-php/common/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/jungi-php/common/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/jungi-php/common/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/jungi-php/common/compare/v1.0.0...v1.1.0

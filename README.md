@@ -123,3 +123,65 @@ class Phone implements Equatable
 assert(true === new Phone('(321) 456-1234')->equals(new Phone('(321) 456-1234')));
 assert(false === new Phone('(321) 456-1234')->equals(new Phone('(454) 456-1234')));
 ```
+
+### Functions
+
+```php
+use function Jungi\Common\equals;
+use function Jungi\Common\in_iterable;
+use function Jungi\Common\iterable_unique;
+use function Jungi\Common\array_equals;
+
+/** @implements Equatable<ContactInformation> */
+class ContactInformation implements Equatable
+{
+    public function __construct(
+        private Phone $phone,
+        private ?Phone $mobile = null
+    ) {}
+
+    public function equals(self $other): bool
+    {
+        return $this->phone->equals($other->phone) && equals($this->mobile, $other->mobile);
+    }
+}
+
+// equals()
+
+$a = new ContactInformation(new Phone('(321) 456-1234'), new Phone('(886) 456-6543'));
+$b = new ContactInformation(new Phone('(321) 456-1234'), new Phone('(886) 456-6543'));
+assert(true === equals($a, $b);
+
+$a = new ContactInformation(new Phone('(321) 456-1234'));
+$b = new ContactInformation(new Phone('(321) 456-1234'), new Phone('(886) 456-6543'));
+assert(false === equals($a, $b);
+
+// array_equals()
+
+$a = [new Phone('(321) 456-1234'), new Phone('(465) 799-4566')];
+$b = [new Phone('(321) 456-1234'), new Phone('(465) 799-4566')];
+assert(true === array_equals($a, $b));
+
+$a = [new Phone('(321) 456-1234'), new Phone('(465) 799-4566')];
+$b = [new Phone('(321) 456-1234')];
+assert(false === array_equals($a, $b));
+
+// in_iterable()
+
+$iterable = [new Phone('(656) 456-7765'), new Phone('(321) 456-1234')];
+assert(true === in_iterable(new Phone('(321) 456-1234'), $iterable));
+assert(false === in_iterable(new Phone('(232) 456-1234'), $iterable));
+
+// iterable_unique()
+
+$unique = iterable_unique([
+    new Phone('(321) 456-1234'),
+    new Phone('(465) 799-4566'),
+    new Phone('(321) 456-1234'),
+]);
+$expected = [
+    new Phone('(321) 456-1234'),
+    new Phone('(465) 799-4566'),
+];
+assert(true === array_equals($expected, $unique));
+```

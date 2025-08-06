@@ -7,11 +7,8 @@ namespace Jungi\Common;
  *   if $a implements Equatable and is equal with $b
  *   if $a and $b are equal, and of the same type "==="
  * otherwise false
- *
- * @param mixed $a
- * @param mixed $b
  */
-function equals($a, $b): bool
+function equals(mixed $a, mixed $b): bool
 {
     if ($a instanceof Equatable) {
         try {
@@ -27,10 +24,8 @@ function equals($a, $b): bool
 /**
  * Returns true if a value is present in an iterable,
  * otherwise false.
- *
- * @param mixed $value
  */
-function in_iterable($value, iterable $iterable): bool
+function in_iterable(mixed $value, iterable $iterable): bool
 {
     foreach ($iterable as $iteratedValue) {
         if (equals($value, $iteratedValue)) {
@@ -43,8 +38,6 @@ function in_iterable($value, iterable $iterable): bool
 
 /**
  * Returns an iterable without duplicates.
- *
- * @param iterable $iterable
  */
 function iterable_unique(iterable $iterable): iterable
 {
@@ -61,13 +54,8 @@ function iterable_unique(iterable $iterable): iterable
 /**
  * Returns the first key where the given value is equal.
  * If the value is not found, false is returned.
- *
- * @param mixed    $value
- * @param iterable $iterable
- *
- * @return mixed A key or false otherwise
  */
-function iterable_search($value, iterable $iterable)
+function iterable_search(mixed $value, iterable $iterable): mixed
 {
     foreach ($iterable as $key => $iteratedValue) {
         if (equals($value, $iteratedValue)) {
@@ -81,11 +69,6 @@ function iterable_search($value, iterable $iterable)
 /**
  * Returns true if both arrays have the same keys
  * and their values are equal.
- *
- * @param array $a
- * @param array $b
- *
- * @return bool
  */
 function array_equals(array $a, array $b): bool
 {

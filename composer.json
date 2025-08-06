@@ -28,8 +28,5 @@
         "psr-4": {
             "Jungi\\Common\\Tests\\": "tests/"
         }
-    },
-    "config": {
-        "bin-dir": "bin/"
     }
 }

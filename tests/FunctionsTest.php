@@ -10,32 +10,8 @@ use function Jungi\Common\in_iterable;
 use function Jungi\Common\iterable_search;
 use function Jungi\Common\iterable_unique;
 
-/**
- * @author Piotr Kugla <piku235@gmail.com>
- */
 class FunctionsTest extends TestCase
 {
-    public function testResultAliases(): void
-    {
-        $r = ok(123);
-        $this->assertTrue($r->isOk());
-        $this->assertEquals(123, $r->get());
-
-        $r = err(123);
-        $this->assertTrue($r->isErr());
-        $this->assertEquals(123, $r->getErr());
-    }
-
-    public function testOptionAliases(): void
-    {
-        $op = some(123);
-        $this->assertTrue($op->isSome());
-        $this->assertEquals(123, $op->get());
-
-        $op = none();
-        $this->assertTrue($op->isNone());
-    }
-
     /** @dataProvider provideEqualVariables */
     public function testThatTwoVariablesEqual($a, $b): void
     {

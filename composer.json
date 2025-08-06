@@ -1,7 +1,7 @@
 {
     "name": "jungi/common",
     "description": "A minimal library that defines primitive building blocks of PHP code.",
-    "keywords": ["result", "option", "equatable", "functional"],
+    "keywords": ["equatable"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -18,8 +18,7 @@
     },
     "autoload": {
         "files": [
-            "src/functions.global.php",
-            "src/functions.local.php"
+            "src/functions.php"
         ],
         "psr-4": {
             "Jungi\\Common\\": "src/"

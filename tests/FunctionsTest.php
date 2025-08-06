@@ -3,6 +3,7 @@
 namespace Jungi\Common\Tests;
 
 use Jungi\Common\Equatable;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use function Jungi\Common\array_equals;
 use function Jungi\Common\equals;
@@ -10,68 +11,9 @@ use function Jungi\Common\in_iterable;
 use function Jungi\Common\iterable_search;
 use function Jungi\Common\iterable_unique;
 
-class FunctionsTest extends TestCase
+final class FunctionsTest extends TestCase
 {
-    /** @dataProvider provideEqualVariables */
-    public function testThatTwoVariablesEqual($a, $b): void
-    {
-        $this->assertTrue(equals($a, $b));
-    }
-
-    /** @dataProvider provideNotEqualVariables */
-    public function testThatTwoVariablesNotEqual($a, $b): void
-    {
-        $this->assertFalse(equals($a, $b));
-    }
-
-    /** @dataProvider providePresentValuesInIterables */
-    public function testThatValueIsInIterable($value, $iterable): void
-    {
-        $this->assertTrue(in_iterable($value, $iterable));
-    }
-
-    /** @dataProvider provideNotPresentValuesInIterables */
-    public function testThatValueIsNotInIterable($value, $iterable): void
-    {
-        $this->assertFalse(in_iterable($value, $iterable));
-    }
-
-    /** @dataProvider provideIterablesWithUniqueAndDuplicatedValues */
-    public function testThatDuplicatedIterableValuesAreRemoved(array $expected, iterable $iterable): void
-    {
-        $uniqueIterable = $this->iterableToArray(iterable_unique($iterable));
-
-        $this->assertCount(count($expected), $uniqueIterable);
-        $this->assertEmpty(array_udiff_assoc($expected, $uniqueIterable, function ($a, $b) {
-            return equals($a, $b) ? 0 : ($a > $b ? 1 : -1);
-        }));
-    }
-
-    /** @dataProvider provideIterablesWithExistingKeys */
-    public function testThatKeyIsReturnedFromIterable($expectedKey, $value, iterable $iterable): void
-    {
-        $this->assertSame($expectedKey, iterable_search($value, $iterable));
-    }
-
-    /** @dataProvider provideIterablesWithNonExistingKeys */
-    public function testThatKeyIsNotReturnedFromIterable($value, iterable $iterable): void
-    {
-        $this->assertFalse(iterable_search($value, $iterable));
-    }
-
-    /** @dataProvider provideEqualArrays */
-    public function testThatArraysEqual(array $a, array $b): void
-    {
-        $this->assertTrue(array_equals($a, $b));
-    }
-
-    /** @dataProvider provideNotEqualArrays */
-    public function testThatArraysNotEqual(array $a, array $b): void
-    {
-        $this->assertFalse(array_equals($a, $b));
-    }
-
-    public function provideEqualVariables(): iterable
+    public static function provideEqualVariables(): iterable
     {
         yield [null, null];
         yield [true, true];
@@ -82,7 +24,7 @@ class FunctionsTest extends TestCase
         yield [new VaryEquatable(123), 123];
     }
 
-    public function provideNotEqualVariables(): iterable
+    public static function provideNotEqualVariables(): iterable
     {
         yield [true, false];
         yield [null, false];
@@ -96,7 +38,7 @@ class FunctionsTest extends TestCase
         yield [new VaryEquatable(123), 234];
     }
 
-    public function providePresentValuesInIterables(): iterable
+    public static function providePresentValuesInIterables(): iterable
     {
         yield [null, [null]];
         yield [123, [234, 123]];
@@ -107,7 +49,7 @@ class FunctionsTest extends TestCase
         yield [new SameEquatable(123), [new SameEquatable(234), new SameEquatable(123)]];
     }
 
-    public function provideNotPresentValuesInIterables(): iterable
+    public static function provideNotPresentValuesInIterables(): iterable
     {
         yield [null, []];
         yield [true, [false]];
@@ -117,7 +59,7 @@ class FunctionsTest extends TestCase
         yield [new SameEquatable(123), [new SameEquatable(234), new SameEquatable(345)]];
     }
 
-    public function provideIterablesWithUniqueAndDuplicatedValues(): iterable
+    public static function provideIterablesWithUniqueAndDuplicatedValues(): iterable
     {
         yield [[], []];
         yield [[null], [null, null]];
@@ -132,7 +74,7 @@ class FunctionsTest extends TestCase
         ];
     }
 
-    public function provideIterablesWithExistingKeys(): iterable
+    public static function provideIterablesWithExistingKeys(): iterable
     {
         yield ['bar', 2, [
             'foo' => 1,
@@ -151,7 +93,7 @@ class FunctionsTest extends TestCase
         ]];
     }
 
-    public function provideIterablesWithNonExistingKeys(): iterable
+    public static function provideIterablesWithNonExistingKeys(): iterable
     {
         yield [0, []];
         yield [0, [
@@ -166,7 +108,7 @@ class FunctionsTest extends TestCase
         ]];
     }
 
-    public function provideEqualArrays(): iterable
+    public static function provideEqualArrays(): iterable
     {
         yield [[], []];
         yield [[null], [null]];
@@ -176,7 +118,7 @@ class FunctionsTest extends TestCase
         yield [[new VaryEquatable(123)], [123]];
     }
 
-    public function provideNotEqualArrays(): iterable
+    public static function provideNotEqualArrays(): iterable
     {
         yield [[], [null]];
         yield [[false], [null]];
@@ -186,6 +128,65 @@ class FunctionsTest extends TestCase
         yield [['foo', 'bar'], ['bar', 'foo']];
         yield [[new SameEquatable(123)], [new SameEquatable(234)]];
         yield [[123], [new VaryEquatable(123)]];
+    }
+
+    #[DataProvider('provideEqualVariables')]
+    public function testThatTwoVariablesEqual($a, $b): void
+    {
+        $this->assertTrue(equals($a, $b));
+    }
+
+    #[DataProvider('provideNotEqualVariables')]
+    public function testThatTwoVariablesNotEqual($a, $b): void
+    {
+        $this->assertFalse(equals($a, $b));
+    }
+
+    #[DataProvider('providePresentValuesInIterables')]
+    public function testThatValueIsInIterable($value, $iterable): void
+    {
+        $this->assertTrue(in_iterable($value, $iterable));
+    }
+
+    #[DataProvider('provideNotPresentValuesInIterables')]
+    public function testThatValueIsNotInIterable($value, $iterable): void
+    {
+        $this->assertFalse(in_iterable($value, $iterable));
+    }
+
+    #[DataProvider('provideIterablesWithUniqueAndDuplicatedValues')]
+    public function testThatDuplicatedIterableValuesAreRemoved(array $expected, iterable $iterable): void
+    {
+        $uniqueIterable = $this->iterableToArray(iterable_unique($iterable));
+
+        $this->assertCount(count($expected), $uniqueIterable);
+        $this->assertEmpty(array_udiff_assoc($expected, $uniqueIterable, function ($a, $b) {
+            return equals($a, $b) ? 0 : ($a > $b ? 1 : -1);
+        }));
+    }
+
+    #[DataProvider('provideIterablesWithExistingKeys')]
+    public function testThatKeyIsReturnedFromIterable($expectedKey, $value, iterable $iterable): void
+    {
+        $this->assertSame($expectedKey, iterable_search($value, $iterable));
+    }
+
+    #[DataProvider('provideIterablesWithNonExistingKeys')]
+    public function testThatKeyIsNotReturnedFromIterable($value, iterable $iterable): void
+    {
+        $this->assertFalse(iterable_search($value, $iterable));
+    }
+
+    #[DataProvider('provideEqualArrays')]
+    public function testThatArraysEqual(array $a, array $b): void
+    {
+        $this->assertTrue(array_equals($a, $b));
+    }
+
+    #[DataProvider('provideNotEqualArrays')]
+    public function testThatArraysNotEqual(array $a, array $b): void
+    {
+        $this->assertFalse(array_equals($a, $b));
     }
 
     private function iterableToArray(iterable $iterable): array
@@ -199,7 +200,7 @@ class FunctionsTest extends TestCase
     }
 }
 
-/** @implements Equatable<SameEquatable> */
+/** @implements Equatable<self> */
 final class SameEquatable implements Equatable
 {
     private $value;

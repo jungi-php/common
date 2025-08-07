@@ -1,4 +1,4 @@
-# Jungi Common
+# 🌱 jungi/common
 
 [![CI](https://github.com/jungi-php/common/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/jungi-php/common/actions/workflows/continuous-integration.yml)
 ![PHP](https://img.shields.io/packagist/php-v/jungi/common)

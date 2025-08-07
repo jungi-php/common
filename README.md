@@ -8,6 +8,7 @@ A minimal library that defines primitive building blocks of PHP code. It defines
 **Primitive types:**
 
 * [`Equatable<T>`](https://piku235.gitbook.io/jungi-common/equatable)
+* [`Result<T>`](https://piku235.gitbook.io/jungi-common/result)
 
 ## Installation
 

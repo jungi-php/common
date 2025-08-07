@@ -3,6 +3,9 @@
 namespace Jungi\Common;
 
 /**
+ * Represents a value that can either be a success (containing a value of type T)
+ * or a failure (containing an error of type E).
+ *
  * @template T
  * @template E
  *
@@ -15,7 +18,7 @@ abstract class Result implements Equatable
     /**
      * @param T $value
      *
-     * @return self<T, E>
+     * @return Result<T, E>
      */
     public static function ok($value): self
     {
@@ -25,7 +28,7 @@ abstract class Result implements Equatable
     /**
      * @param E $value
      *
-     * @return self<T, E>
+     * @return Result<T, E>
      */
     public static function error($value): self
     {
@@ -35,19 +38,27 @@ abstract class Result implements Equatable
     /**
      * @var T
      *
-     * @throws \LogicException
+     * @throws \LogicException If accessed when the result has error
      */
     protected(set) mixed $value;
 
     /**
      * @var E
      *
-     * @throws \LogicException
+     * @throws \LogicException If accessed when the result has value
      */
     protected(set) mixed $error;
 
     /**
-     * @return T
+     * Dereferences the contained value.
+     *
+     * This is a shorthand for accessing the result's value directly `$this->value`.
+     *
+     * @example $r()->foo
+     *
+     * @return T The contained value
+     *
+     * @throws \LogicException If the result has error
      */
     public function __invoke()
     {
@@ -57,15 +68,27 @@ abstract class Result implements Equatable
     abstract public function hasValue(): bool;
 
     /**
+     * Returns the contained value, or the given default if the result is an error.
+     *
      * @template U
      *
-     * @param U $other
+     * @param U $defaultValue
      *
      * @return T|U
      */
-    abstract public function valueOr($other);
+    abstract public function valueOr($defaultValue);
 
     /**
+     * Returns a new result with the value mapped using the given callback.
+     * If the result has error, it is returned unchanged.
+     *
+     * <code>
+     *    function mul(int $value): int { return 3 * $value; }
+     *
+     *    assert(6 === Result::ok(2)->map('mul'));
+     *    assert(2 === Result::error(2)->map('mul'));
+     * </code>
+     *
      * @template U
      *
      * @param callable(T): U $fn
@@ -75,6 +98,16 @@ abstract class Result implements Equatable
     abstract public function map(callable $fn): self;
 
     /**
+     * Returns a new result with the error mapped using the given callback.
+     * If the result has value, it is returned unchanged.
+     *
+     * <code>
+     *     function mul(int $value): int { return 3 * $value; }
+     *
+     *     assert(2 === Result::ok(2)->mapError('mul'));
+     *     assert(6 === Result::error(2)->mapError('mul'));
+     * </code>
+     *
      * @template U
      *
      * @param callable(E): U $fn
@@ -114,7 +147,7 @@ final class Ok extends Result
         return true;
     }
 
-    public function valueOr($other)
+    public function valueOr($defaultValue)
     {
         return $this->value;
     }
@@ -160,9 +193,9 @@ final class Error extends Result
         return false;
     }
 
-    public function valueOr($other)
+    public function valueOr($defaultValue)
     {
-        return $other;
+        return $defaultValue;
     }
 
     public function map(callable $fn): self

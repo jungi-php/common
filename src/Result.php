@@ -16,11 +16,11 @@ namespace Jungi\Common;
 abstract class Result implements Equatable
 {
     /**
-     * @param T $value
+     * @param T|null $value Null in case T of void
      *
      * @return Result<T, E>
      */
-    public static function ok($value): self
+    public static function ok($value = null): self
     {
         return new Ok($value);
     }
@@ -65,7 +65,7 @@ abstract class Result implements Equatable
         return $this->value;
     }
 
-    abstract public function hasValue(): bool;
+    abstract public function isOk(): bool;
 
     /**
      * Returns the contained value, or the given default if the result is an error.
@@ -142,7 +142,7 @@ final class Ok extends Result
         return $other instanceof self && equals($this->value, $other->value);
     }
 
-    public function hasValue(): bool
+    public function isOk(): bool
     {
         return true;
     }
@@ -188,7 +188,7 @@ final class Error extends Result
         return $other instanceof self && equals($this->error, $other->error);
     }
 
-    public function hasValue(): bool
+    public function isOk(): bool
     {
         return false;
     }

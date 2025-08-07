@@ -15,7 +15,7 @@ class ResultTest extends TestCase
         /** @var Result<string, int> $r */
         $r = Result::ok("foo");
 
-        $this->assertTrue($r->hasValue());
+        $this->assertTrue($r->isOk());
         $this->assertEquals("foo", $r->value);
         $this->assertEquals("foo", $r());
     }
@@ -35,7 +35,7 @@ class ResultTest extends TestCase
         /** @var Result<string, int> $r */
         $r = Result::error(self::ERR_TEST);
 
-        $this->assertFalse($r->hasValue());
+        $this->assertFalse($r->isOk());
         $this->assertEquals(self::ERR_TEST, $r->error);
     }
 
@@ -81,7 +81,7 @@ class ResultTest extends TestCase
         /** @var Result<double, int> $r */
         $r = Result::ok("foo")->map(fn ($value) => 1.23);
 
-        $this->assertTrue($r->hasValue());
+        $this->assertTrue($r->isOk());
         $this->assertEquals(1.23, $r->value);
     }
 
@@ -90,7 +90,7 @@ class ResultTest extends TestCase
         /** @var Result<string, int> $r */
         $r = Result::error(self::ERR_TEST)->map(fn($value) => 1.23);
 
-        $this->assertFalse($r->hasValue());
+        $this->assertFalse($r->isOk());
         $this->assertEquals(self::ERR_TEST, $r->error);
     }
 
@@ -99,7 +99,7 @@ class ResultTest extends TestCase
         /** @var Result<string, string> $r */
         $r = Result::error(self::ERR_TEST)->mapError(fn ($value) => "err");
 
-        $this->assertFalse($r->hasValue());
+        $this->assertFalse($r->isOk());
         $this->assertEquals("err", $r->error);
     }
 
@@ -108,7 +108,7 @@ class ResultTest extends TestCase
         /** @var Result<string, string> $r */
         $r = Result::ok("foo")->mapError(fn ($value) => "err");
 
-        $this->assertTrue($r->hasValue());
+        $this->assertTrue($r->isOk());
         $this->assertEquals("foo", $r->value);
     }
 }

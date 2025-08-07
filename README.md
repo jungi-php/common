@@ -40,6 +40,72 @@ assert(true === (new Phone('(321) 456-1234'))->equals(new Phone('(321) 456-1234'
 assert(false === (new Phone('(321) 456-1234'))->equals(new Phone('(454) 456-1234')));
 ```
 
+### Result
+
+```php
+final class Student
+{
+    public function __construct(
+        public readonly StudentId $id,
+        private(set) bool $active,
+        private(set) string $name,
+    ) {}
+}
+
+enum ClassEnrollmentError: string {
+    case InactiveStudent = 'inactive_student';
+    case StudentAlreadyEnrolled = 'student_already_enrolled';
+    case NoSeatsAvailable = 'no_seats_available';
+}
+
+final class Class_
+{
+    public function __construct(
+        public readonly ClassId $id,
+        private(set) int $numberOfSeats,
+        /** @var StudentId[] */
+        private(set) array $students,
+    ) {}
+    
+    /** @return Result<void, ClassEnrollmentError> */
+    public function enroll(Student $student): Result
+    {
+        if (!$student->active) {
+            return Result::error(ClassEnrollmentError::InactiveStudent);
+        }
+        if (in_iterable($student->id(), $this->students)) {
+            return Result::error(ClassEnrollmentError::StudentAlreadyEnrolled);
+        }
+        if (count($this->students) >= $this->numberOfSeats) {
+            return Result::error(ClassEnrollmentError::NoSeatsAvailable);
+        }
+        
+        $this->students[] = $student->id();
+        
+        return Result::ok();
+    }
+}
+
+class ClassController
+{
+    // PUT /classes/{classId}/students/{studentId}
+    public function enrollToClass(string $classId, string $studentId)
+    {
+        // ... fetch the class and the student
+        $r = $class->enroll($student);
+        
+        if ($r->isOk()) {
+            return $this->created();
+        }
+        
+        return match ($r->error) {
+            ClassEnrollmentError::StudentAlreadyEnrolled => $this->noContent(), // returns 204
+            default => $this->conflict($error), // returns 409 with the error
+        };
+    }
+}
+```
+
 ### Functions
 
 ```php
